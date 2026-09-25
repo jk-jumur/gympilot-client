@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@gravity-ui/icons": "^2.22.0",
+    "@heroui/react": "^3.2.6",
+    "@heroui/styles": "^3.2.6",
     "@stripe/stripe-js": "^9.17.0",
     "better-auth": "^1.7.6",
     "mongodb": "^7.6.0",
