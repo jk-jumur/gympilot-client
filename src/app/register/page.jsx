@@ -13,7 +13,7 @@ export default function RegisterPage() {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  // Password validation according to requirement
+  
   const validatePassword = (pass) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     return regex.test(pass);
