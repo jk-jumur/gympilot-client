@@ -167,9 +167,10 @@ export default function Navbar() {
           <div className="hidden h-7 w-px bg-gray-200 lg:block" />
 
           {/* Login (Visible only on Desktop) */}
+          <Link  href="/login">
           <Button
-            as={Link}
-            href="/login"
+           
+           
             variant="light"
             radius="full"
             className="
@@ -181,7 +182,7 @@ export default function Navbar() {
           >
             Login
           </Button>
-
+              </Link>
           {/* Register (Visible only on Desktop) */}
           <Button
             as={Link}

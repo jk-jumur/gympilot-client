@@ -1,3 +1,36 @@
 @import "tailwindcss";
 @import "@heroui/styles"; 
 
+:root {
+  /* Background */
+  --bg-primary: #0F0F0F;
+  --bg-secondary: #1A1A1A;
+  --bg-tertiary: #242424;
+
+  /* Primary Orange */
+  --primary: #FF4D00;
+  --primary-hover: #FF6A1A;
+  --primary-light: #FF7A33;
+
+  /* Accent */
+  --accent: #FFB800;
+  --accent-hover: #FFC933;
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --text-muted: #666666;
+
+  /* Border */
+  --border: #2A2A2A;
+  --border-light: #333333;
+
+  /* Optional */
+  --success: #22C55E;
+  --error: #EF4444;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
