@@ -1,9 +1,30 @@
 
+
 "use client";
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: "easeOut" },
+  },
+};
 
 const Banner = () => {
   return (
@@ -16,30 +37,42 @@ const Banner = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center"
+        >
           
-          {/* Left Text Content (6 Columns) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 space-y-6 sm:space-y-8 text-center lg:text-left"
-          >
-            <div className="inline-flex items-center gap-2.5 bg-white/80 dark:bg-zinc-900 border border-orange-200/60 dark:border-zinc-800 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400 shadow-sm mx-auto lg:mx-0">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-              Fitness & Gym Management Platform
-            </div>
+          {/* Left Text Content  */}
+          <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-center lg:text-left">
             
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] sm:leading-[1.1]">
+            <motion.div variants={itemVariants}>
+              <div className="inline-flex items-center gap-2.5 bg-white/80 dark:bg-zinc-900 border border-orange-200/60 dark:border-zinc-800 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest text-orange-600 dark:text-orange-400 shadow-sm mx-auto lg:mx-0">
+                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                Fitness & Gym Management Platform
+              </div>
+            </motion.div>
+            
+            <motion.h1 
+              variants={itemVariants}
+              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] sm:leading-[1.1]"
+            >
               Transform Your <span className="text-orange-500">Fitness Journey</span> With GymPilot
-            </h1>
+            </motion.h1>
             
-            <p className="text-gray-600 dark:text-zinc-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+            <motion.p 
+              variants={itemVariants}
+              className="text-gray-600 dark:text-zinc-400 text-sm sm:text-base lg:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal"
+            >
               Discover professional fitness classes, book expert trainers, track your progress, and join our vibrant community to achieve your ultimate fitness potential.
-            </p>
+            </motion.p>
             
             {/* Dual Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
+            <motion.div 
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2"
+            >
               <Link
                 href="/all-classes"
                 className="inline-flex justify-center items-center gap-2 px-8 py-4 text-base font-bold rounded-2xl text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/20 transition-all duration-300 transform hover:-translate-y-0.5 group"
@@ -54,10 +87,13 @@ const Banner = () => {
                 <span>Join Free</span>
                 <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
               </Link>
-            </div>
+            </motion.div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-orange-200/50 dark:border-zinc-800 max-w-md mx-auto lg:mx-0">
+            <motion.div 
+              variants={itemVariants}
+              className="grid grid-cols-3 gap-4 pt-6 border-t border-orange-200/50 dark:border-zinc-800 max-w-md mx-auto lg:mx-0"
+            >
               <div>
                 <p className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">50+</p>
                 <p className="text-[10px] sm:text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-semibold">Trainers</p>
@@ -70,18 +106,17 @@ const Banner = () => {
                 <p className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">24/7</p>
                 <p className="text-[10px] sm:text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-semibold">Access</p>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
+          </div>
+
+         
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            variants={itemVariants}
             className="lg:col-span-6 relative mt-6 lg:mt-0"
           >
             <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">
-              
-              {/* 1. Left Image */}
+          
               <div className="w-1/3 lg:transform lg:-translate-y-12">
                 <div className="relative w-full h-48 sm:h-64 lg:h-72 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-orange-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 group">
                   <Image 
@@ -94,7 +129,7 @@ const Banner = () => {
                 </div>
               </div>
 
-          
+      
               <div className="w-1/3 z-10">
                 <div className="relative w-full h-56 sm:h-80 lg:h-96 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-orange-500/50 bg-white dark:bg-zinc-900 group">
                   <Image 
@@ -111,7 +146,7 @@ const Banner = () => {
                 </div>
               </div>
 
-              {/* 3. Right Image */}
+
               <div className="w-1/3 lg:transform lg:translate-y-12">
                 <div className="relative w-full h-48 sm:h-64 lg:h-72 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-orange-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 group">
                   <Image 
@@ -127,15 +162,13 @@ const Banner = () => {
             </div>
           </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 };
 
 export default Banner;
-
-
 
 
 
