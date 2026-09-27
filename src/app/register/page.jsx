@@ -1,6 +1,8 @@
 "use client";
 
-import { Link } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
@@ -11,15 +13,16 @@ export default function RegisterPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
 
+  const router = useRouter(); 
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  
   const validatePassword = (pass) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     return regex.test(pass);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -30,9 +33,25 @@ export default function RegisterPage() {
       return;
     }
 
-    // TODO: Call your Better Auth register function here
-    console.log("Registering with:", { name, email, image, password });
+    try {
+      const { data, error } = await authClient.signUp.email({
+        email,
+        password,
+        name,
+        image: image || undefined, 
+      }, {
+        onSuccess: () => {
+          router.push("/"); 
+        },
+        onError: (ctx) => {
+          setError(ctx.error.message);
+        }
+      });
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
   };
+  
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
@@ -60,7 +79,7 @@ export default function RegisterPage() {
             </Link>
           </div>
 
-          {/* Content */}
+        
          {/* Content */}
        <div className="relative z-10 my-auto space-y-6 py-8">
     <h1 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
@@ -255,7 +274,7 @@ export default function RegisterPage() {
 
           {/* Footer */}
           <div className="text-center text-xs text-[#A3A3A3] dark:text-[#666666] lg:text-left">
-            By creating an account, you agree to GymPilot's Terms & Privacy.
+            By creating an account, you agree to GymPilots Terms & Privacy.
           </div>
         </div>
       </div>

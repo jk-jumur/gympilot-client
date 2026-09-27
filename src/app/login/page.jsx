@@ -1,31 +1,51 @@
 "use client";
 
-import { Link } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+
 import { useState } from "react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleDemoLogin = (role) => {
-    if (role === "admin") {
-      setEmail("admin@gynpilot.com");
-      setPassword("admin123");
-    } else if (role === "trainer") {
-      setEmail("trainer@gynpilot.com");
-      setPassword("trainer123");
-    } else if (role === "user") {
-      setEmail("user@gynpilot.com");
-      setPassword("user123");
-    }
-  };
+ const handleDemoLogin = (role) => {
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Logging in with:", email, password);
+if (role === "admin") {
+
+setEmail("admin@gynpilot.com");
+
+setPassword("admin123");
+
+} else if (role === "trainer") {
+
+setEmail("trainer@gynpilot.com");
+
+setPassword("trainer123");
+
+} else if (role === "user") {
+
+setEmail("user@gynpilot.com");
+
+setPassword("user123");
+
+}
+
+};
+
+  const handleSubmit = async(e) => {
+   e.preventDefault();
+
+
+      const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/",
+    });
   };
 
   return (
@@ -110,7 +130,7 @@ export default function LoginPage() {
             </div>
 
             <p className="text-sm text-[#737373] dark:text-[#A0A0A0]">
-              Don't have an account?{" "}
+              Dont have an account?{" "}
               <Link href="/register" className="font-semibold text-[#F97316] no-underline hover:underline dark:text-[#FF4D00]">
                 Sign up free
               </Link>
@@ -155,8 +175,9 @@ export default function LoginPage() {
                   <input
                     type="email"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                     name="email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     className="w-full rounded-xl border border-[#FED7AA] bg-[#FAFAF9] py-3 pl-10 pr-4 text-sm text-[#171717] placeholder-[#A3A3A3] transition-all focus:border-[#F97316] focus:bg-white focus:outline-none dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-white dark:placeholder-[#666666] dark:focus:border-[#FF4D00] dark:focus:bg-[#151515]"
                   />
@@ -182,6 +203,7 @@ export default function LoginPage() {
                   <input
                     type={isVisible ? "text" : "password"}
                     required
+                    name="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
@@ -245,7 +267,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <div className="text-center text-xs text-[#A3A3A3] dark:text-[#666666] lg:text-left">
-            Protected by reCAPTCHA and subject to GymPilot's Terms & Privacy.
+            Protected by reCAPTCHA and subject to GymPilots Terms & Privacy.
           </div>
         </div>
       </div>
