@@ -75,7 +75,7 @@ export default function DashboardSidebar({ user, isOpen, onClose }) {
           >
             {/* Logo Icon */}
             <div className="relative h-10 w-10 shrink-0 rounded-xl 
-              bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500
+              bg-linear-to-br from-orange-500 via-orange-500 to-amber-500
               flex items-center justify-center
               shadow-lg shadow-orange-500/30
               transition-all duration-300
@@ -83,7 +83,7 @@ export default function DashboardSidebar({ user, isOpen, onClose }) {
               group-hover:rotate-[5deg]">
 
               {/* Glow ring on hover */}
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-300" />
+              <span className="absolute inset-0 rounded-xl bg-linear-to-br from-orange-400 to-amber-400 opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-300" />
 
               {/* Lightning + spark dots SVG */}
               <svg
@@ -107,7 +107,7 @@ export default function DashboardSidebar({ user, isOpen, onClose }) {
             {/* Logo Text */}
             <div className="flex items-baseline text-lg font-black tracking-tight whitespace-nowrap">
               <span className="text-stone-900 dark:text-white">Gym</span>
-              <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 Pilot
               </span>
             </div>
