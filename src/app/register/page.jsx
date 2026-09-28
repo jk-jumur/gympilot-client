@@ -13,7 +13,7 @@ export default function RegisterPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -34,24 +34,27 @@ export default function RegisterPage() {
     }
 
     try {
-      const { data, error } = await authClient.signUp.email({
-        email,
-        password,
-        name,
-        image: image || undefined, 
-      }, {
-        onSuccess: () => {
-          router.push("/"); 
+      await authClient.signUp.email(
+        {
+          email,
+          password,
+          name,
+          image: image || undefined,
+           
         },
-        onError: (ctx) => {
-          setError(ctx.error.message);
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: (ctx) => {
+            setError(ctx.error.message);
+          },
         }
-      });
+      );
     } catch (err) {
       setError("Something went wrong. Please try again.");
     }
   };
-  
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
@@ -59,8 +62,6 @@ export default function RegisterPage() {
         
         {/* ================= LEFT SIDE ================= */}
         <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#EA580C] via-[#F97316] to-[#F59E0B] p-10 text-white dark:from-[#1A1A1A] dark:via-[#1F120B] dark:to-[#2A1500]">
-          
-          {/* Decorative blobs */}
           <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-white/10 blur-3xl dark:bg-[#FF4D00]/10" />
           <div className="pointer-events-none absolute -left-12 -bottom-12 h-64 w-64 rounded-full bg-black/10 blur-3xl dark:bg-[#FF4D00]/5" />
 
@@ -79,37 +80,34 @@ export default function RegisterPage() {
             </Link>
           </div>
 
-        
-         {/* Content */}
-       <div className="relative z-10 my-auto space-y-6 py-8">
-    <h1 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
-    Start Your <span className="text-amber-200 dark:text-[#FFB800]">Fitness Journey</span>
-    </h1>
-     <p className="text-sm leading-relaxed text-orange-50 dark:text-[#A0A0A0] xl:text-base">
-    Join GymPilot today — book expert classes, track your progress, and become part of a powerful fitness community.
-    </p>
+          {/* Content */}
+          <div className="relative z-10 my-auto space-y-6 py-8">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
+              Start Your <span className="text-amber-200 dark:text-[#FFB800]">Fitness Journey</span>
+            </h1>
+            <p className="text-sm leading-relaxed text-orange-50 dark:text-[#A0A0A0] xl:text-base">
+              Join GymPilot today — book expert classes, track your progress, and become part of a powerful fitness community.
+            </p>
 
-  {/* Feature pills - Different from Login */}
-     <div className="space-y-3 pt-2">
-    {[
-      { icon: "🚀", text: "Get Started in Minutes" },
-      { icon: "🎯", text: "Personalized Training Path" },
-      { icon: "🔥", text: "Stay Motivated Daily" },
-    ].map((item, i) => (
-      <div
-        key={i}
-        className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium backdrop-blur-md dark:border-[#FF4D00]/20 dark:bg-[#FF4D00]/10"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/25 text-white dark:bg-[#FF4D00]/25">
-          {item.icon}
-        </span>
-        <span>{item.text}</span>
-      </div>
-    ))}
-  </div>
-   </div>
+            <div className="space-y-3 pt-2">
+              {[
+                { icon: "🚀", text: "Get Started in Minutes" },
+                { icon: "🎯", text: "Personalized Training Path" },
+                { icon: "🔥", text: "Stay Motivated Daily" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium backdrop-blur-md dark:border-[#FF4D00]/20 dark:bg-[#FF4D00]/10"
+                >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/25 text-white dark:bg-[#FF4D00]/25">
+                    {item.icon}
+                  </span>
+                  <span>{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-          {/* Copyright */}
           <div className="relative z-10 text-xs text-orange-100 dark:text-[#666666]">
             &copy; {new Date().getFullYear()} GymPilot. All rights reserved.
           </div>
@@ -125,7 +123,6 @@ export default function RegisterPage() {
                 Create Account
               </h2>
 
-              {/* Mobile Logo */}
               <Link href="/" className="flex items-center gap-2 no-underline lg:hidden">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 text-white shadow-md dark:bg-[#FF4D00]">
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
@@ -144,8 +141,6 @@ export default function RegisterPage() {
           </div>
 
           <div className="my-6 space-y-5">
-            
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               
               {/* Name */}
@@ -228,7 +223,7 @@ export default function RegisterPage() {
                 </p>
               </div>
 
-              {/* Error Message */}
+              {/* Error */}
               {error && (
                 <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
                   {error}
@@ -257,7 +252,7 @@ export default function RegisterPage() {
               </span>
             </div>
 
-            {/* Google Button */}
+            {/* Google */}
             <button
               type="button"
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#FED7AA] bg-white py-3 text-sm font-semibold text-[#404040] shadow-sm transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
@@ -272,7 +267,6 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          {/* Footer */}
           <div className="text-center text-xs text-[#A3A3A3] dark:text-[#666666] lg:text-left">
             By creating an account, you agree to GymPilots Terms & Privacy.
           </div>

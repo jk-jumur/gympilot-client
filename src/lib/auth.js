@@ -17,10 +17,39 @@ export const auth = betterAuth({
     enabled: true, 
   }, 
 
-   socialProviders: {
-        google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID , 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET , 
-        }, 
+//    socialProviders: {
+//         google: { 
+//             clientId: process.env.GOOGLE_CLIENT_ID , 
+//             clientSecret: process.env.GOOGLE_CLIENT_SECRET , 
+//         }, 
+//     },
+
+
+  user: {
+  additionalFields: {
+    role: {
+      type: "string",
+      defaultValue: "user",
+      input: false,        
     },
+    subscriptionPlan: {
+      type: "string",
+      defaultValue: "free",
+      input: false,        
+    },
+  },
+},
+
+  databaseHooks: {
+  user: {
+    create: {
+      before: async (user) => {
+        if (user.email === "admin@gympilot.com") {
+          return { data: { ...user, role: "admin" } };
+        }
+        return { data: user };
+      },
+    },
+  },
+},
 });

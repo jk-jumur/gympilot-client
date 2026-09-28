@@ -1,9 +1,15 @@
 "use client";
 
 import { Link } from "@heroui/react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+   const pathname = usePathname();
+   
+   if (pathname.includes("dashboard")) {
+    return null;
+  }
 
   return (
     <footer className="w-full border-t border-orange-100 bg-white text-gray-700">

@@ -1,11 +1,12 @@
+
 @import "tailwindcss";
 @import "@heroui/styles"; 
 
 :root {
-  /* Background */
-  --bg-primary: #0F0F0F;
-  --bg-secondary: #1A1A1A;
-  --bg-tertiary: #242424;
+  /* Default Light Mode Variables */
+  --bg-primary: #FAFAF9;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F5F5F4;
 
   /* Primary Orange */
   --primary: #FF4D00;
@@ -17,20 +18,38 @@
   --accent-hover: #FFC933;
 
   /* Text */
-  --text-primary: #FFFFFF;
-  --text-secondary: #A0A0A0;
-  --text-muted: #666666;
+  --text-primary: #171717;
+  --text-secondary: #737373;
+  --text-muted: #A3A3A3;
 
   /* Border */
-  --border: #2A2A2A;
-  --border-light: #333333;
+  --border: #E7E5E4;
+  --border-light: #F5F5F4;
 
   /* Optional */
   --success: #22C55E;
   --error: #EF4444;
 }
 
+/* Dark Mode Variables (যখন html বা body-তে .dark ক্লাস থাকবে) */
+.dark, html.dark {
+  --bg-primary: #0F0F0F;
+  --bg-secondary: #1A1A1A;
+  --bg-tertiary: #242424;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --text-muted: #666666;
+
+  --border: #2A2A2A;
+  --border-light: #333333;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+
+

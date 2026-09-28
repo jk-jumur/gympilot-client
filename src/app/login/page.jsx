@@ -1,47 +1,22 @@
+
+
 "use client";
 
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
-
 import { useState } from "react";
 
 export default function LoginPage() {
-const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
-
   const toggleVisibility = () => setIsVisible(!isVisible);
 
- const handleDemoLogin = (role) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-if (role === "admin") {
-
-setEmail("admin@gynpilot.com");
-
-setPassword("admin123");
-
-} else if (role === "trainer") {
-
-setEmail("trainer@gynpilot.com");
-
-setPassword("trainer123");
-
-} else if (role === "user") {
-
-setEmail("user@gynpilot.com");
-
-setPassword("user123");
-
-}
-
-};
-
-  const handleSubmit = async(e) => {
-   e.preventDefault();
-
-
-      const { data, error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email,
       password,
       callbackURL: "/",
@@ -138,25 +113,6 @@ setPassword("user123");
           </div>
 
           <div className="my-6 space-y-6">
-            
-            {/* Quick Demo */}
-            <div className="rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] p-4 dark:border-[#2A2A2A] dark:bg-[#242424]">
-              <p className="mb-2.5 text-xs font-bold uppercase tracking-wider text-[#525252] dark:text-[#A0A0A0]">
-                Quick Demo Login
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {["admin", "trainer", "user"].map((role) => (
-                  <button
-                    key={role}
-                    type="button"
-                    onClick={() => handleDemoLogin(role)}
-                    className="rounded-full border border-[#FDBA74] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#404040] shadow-sm transition-all hover:border-[#F97316] hover:bg-[#F97316] hover:text-white dark:border-[#3A3A3A] dark:bg-[#1A1A1A] dark:text-[#E0E0E0] dark:hover:border-[#FF4D00] dark:hover:bg-[#FF4D00] dark:hover:text-white"
-                  >
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -175,9 +131,9 @@ setPassword("user123");
                   <input
                     type="email"
                     required
-                     name="email"
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     className="w-full rounded-xl border border-[#FED7AA] bg-[#FAFAF9] py-3 pl-10 pr-4 text-sm text-[#171717] placeholder-[#A3A3A3] transition-all focus:border-[#F97316] focus:bg-white focus:outline-none dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-white dark:placeholder-[#666666] dark:focus:border-[#FF4D00] dark:focus:bg-[#151515]"
                   />
