@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   HiOutlineChatBubbleLeftRight,
@@ -9,52 +10,12 @@ import {
   HiOutlineArrowRight,
   HiOutlineClock,
   HiOutlineSparkles,
+  HiOutlineBookOpen,
 } from "react-icons/hi2";
 
-// 💬 4 posts — with author image + excerpt
-const LATEST_POSTS = [
-  {
-    id: 1,
-    title: "How I Lost 12kg in 6 Months Without a Gym",
-    author: "Olivia Bennett",
-    authorImage: "https://i.pravatar.cc/100?img=47",
-    excerpt:
-      "You don't need a fancy gym membership to transform your body. Here's the exact routine that worked for me...",
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
-    date: "1 day ago",
-  },
-  {
-    id: 2,
-    title: "The Truth About Protein Supplements",
-    author: "Lucas Müller",
-    authorImage: "https://i.pravatar.cc/100?img=13",
-    excerpt:
-      "Do you really need protein powder? Let's cut through the marketing and look at the actual science...",
-    image: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=800&q=80",
-    date: "3 days ago",
-  },
-  {
-    id: 3,
-    title: "5-Minute Morning Mobility Routine",
-    author: "Yuki Tanaka",
-    authorImage: "https://i.pravatar.cc/100?img=36",
-    excerpt:
-      "Start your day with this quick routine. Your joints will thank you, especially if you sit at a desk all day...",
-    image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=800&q=80",
-    date: "5 days ago",
-  },
-  {
-    id: 4,
-    title: "Cardio vs Weights: Which Comes First?",
-    author: "Amara Okafor",
-    authorImage: "https://i.pravatar.cc/100?img=59",
-    excerpt:
-      "The age-old debate finally settled. Here's what the research says about workout order and results...",
-    image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&q=80",
-    date: "1 week ago",
-  },
-];
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
+// ⭐ Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -72,7 +33,82 @@ const cardVariants = {
   },
 };
 
+// ⭐ Auto category
+function getCategory(post) {
+  if (post.category) return post.category;
+  const title = post.title?.toLowerCase() || "";
+  if (title.includes("yoga") || title.includes("mobility")) return "YOGA";
+  if (title.includes("cardio") || title.includes("hiit")) return "CARDIO";
+  if (title.includes("protein") || title.includes("nutrition")) return "NUTRITION";
+  if (title.includes("strength") || title.includes("weight")) return "TRAINING";
+  if (title.includes("sleep") || title.includes("habit")) return "WELLNESS";
+  return "COMMUNITY";
+}
+
+// ⭐ Format date
+function formatDate(date) {
+  const now = new Date();
+  const d = new Date(date);
+  const diff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+
+  if (diff === 0) return "Today";
+  if (diff === 1) return "1 day ago";
+  if (diff < 7) return `${diff} days ago`;
+  if (diff < 30) return `${Math.floor(diff / 7)} week${diff >= 14 ? "s" : ""} ago`;
+  return `${Math.floor(diff / 30)} month${diff >= 60 ? "s" : ""} ago`;
+}
+
+// ⭐ Skeleton
+function PostSkeleton() {
+  return (
+    <div className="rounded-2xl overflow-hidden bg-white dark:bg-stone-950 border border-stone-200 dark:border-stone-800 animate-pulse">
+      <div className="aspect-[4/3] bg-stone-200 dark:bg-stone-800" />
+      <div className="p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-7 w-7 rounded-full bg-stone-200 dark:bg-stone-800" />
+          <div className="h-3 w-20 rounded bg-stone-200 dark:bg-stone-800" />
+        </div>
+        <div className="h-4 rounded bg-stone-200 dark:bg-stone-800" />
+        <div className="h-4 w-4/5 rounded bg-stone-200 dark:bg-stone-800" />
+        <div className="h-3 rounded bg-stone-200 dark:bg-stone-800" />
+        <div className="h-3 w-5/6 rounded bg-stone-200 dark:bg-stone-800" />
+        <div className="h-10 rounded-xl bg-stone-200 dark:bg-stone-800" />
+      </div>
+    </div>
+  );
+}
+
 export default function LatestForumPosts() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ⭐ Fetch from API
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchLatest() {
+      try {
+        const res = await fetch(`${API_URL}/api/forum/latest`);
+        const data = await res.json();
+
+        if (!cancelled && data.success) {
+          setPosts(data.data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error("Failed to fetch forum posts:", err);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchLatest();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className="relative py-16 sm:py-24 overflow-hidden
       bg-gradient-to-b from-stone-50 via-orange-50/40 to-stone-50
@@ -83,7 +119,7 @@ export default function LatestForumPosts() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Section Header */}
+        {/* ═══ Section Header ═══ */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full
@@ -119,121 +155,140 @@ export default function LatestForumPosts() {
           </Link>
         </div>
 
-        {/* Posts Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {LATEST_POSTS.map((post) => (
-            <motion.article
-              key={post.id}
-              variants={cardVariants}
-              whileHover={{ y: -8 }}
-              transition={{ duration: 0.3 }}
-              className="group relative rounded-3xl overflow-hidden
-                bg-white dark:bg-stone-950
-                border border-stone-200 dark:border-stone-800
-                hover:border-orange-500/50
-                shadow-md hover:shadow-2xl hover:shadow-orange-500/20
-                transition-all duration-300 flex flex-col"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              </div>
+        {/* ═══ Content ═══ */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <PostSkeleton key={i} />
+            ))}
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-stone-500 dark:text-stone-400">
+              No posts yet. Check back soon!
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {posts.map((post) => {
+              const category = getCategory(post);
 
-              {/* ═══ Content ═══ */}
-              <div className="p-4 flex flex-col flex-1">
-
-                {/* ⭐ Author Row — with avatar */}
-                <div className="flex items-center gap-2 h-6 mb-2">
-                  <div className="relative shrink-0">
-                    <div className="h-6 w-6 rounded-full p-[1.5px] bg-gradient-to-tr from-orange-500 to-amber-400">
-                      <Image
-                        src={post.authorImage}
-                        alt={post.author}
-                        width={24}
-                        height={24}
-                        className="h-full w-full rounded-full object-cover ring-2 ring-white dark:ring-stone-950"
-                      />
-                    </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-stone-950" />
-                  </div>
-                  <span className="text-[11px] font-bold text-stone-700 dark:text-stone-300 truncate">
-                    {post.author}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-sm font-extrabold text-stone-900 dark:text-white leading-snug line-clamp-2 min-h-[2.5rem]
-                  group-hover:text-orange-500 transition-colors">
-                  {post.title}
-                </h3>
-
-                {/* Excerpt */}
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-2 line-clamp-2 leading-relaxed min-h-[2.5rem]">
-                  {post.excerpt}
-                </p>
-
-                {/* Spacer */}
-                <div className="flex-1" />
-
-                {/* Meta row */}
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-dashed border-stone-200 dark:border-stone-800">
-                  <span className="inline-flex items-center gap-1 text-[11px] text-stone-400 font-medium">
-                    <HiOutlineClock className="h-3.5 w-3.5" />
-                    {post.date}
-                  </span>
-
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-flex items-center justify-center h-6 w-6 rounded-full
-                        bg-rose-500/10 text-rose-500
-                        hover:bg-rose-500 hover:text-white
-                        transition-colors cursor-pointer"
-                      aria-label="Likes"
-                    >
-                      <HiOutlineHeart className="h-3.5 w-3.5" />
-                    </span>
-                    <span
-                      className="inline-flex items-center justify-center h-6 w-6 rounded-full
-                        bg-orange-500/10 text-orange-500
-                        hover:bg-orange-500 hover:text-white
-                        transition-colors cursor-pointer"
-                      aria-label="Comments"
-                    >
-                      <HiOutlineChatBubbleLeftRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </div>
-
-                {/* Button */}
-                <Link
-                  href={`/forum/${post.id}`}
-                  className="group/btn mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold
-                    bg-orange-500
-                    text-white
-                    hover:bg-orange-600
-                    shadow-md shadow-orange-500/20 hover:shadow-orange-500/40
-                    transition-all duration-300"
+              return (
+                <motion.article
+                  key={post._id}
+                  variants={cardVariants}
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.3 }}
+                  className="group relative rounded-3xl overflow-hidden
+                    bg-white dark:bg-stone-950
+                    border border-stone-200 dark:border-stone-800
+                    hover:border-orange-500/50
+                    shadow-md hover:shadow-2xl hover:shadow-orange-500/20
+                    transition-all duration-300 flex flex-col"
                 >
-                  Read Full Post
-                  <HiOutlineArrowRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-1" />
-                </Link>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+                    {/* Category badge */}
+                    <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full
+                      bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm
+                      text-[10px] font-bold uppercase tracking-wider
+                      text-stone-800 dark:text-stone-100">
+                      {category}
+                    </span>
+
+                    {/* Reading time */}
+                    <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full
+                      bg-black/40 backdrop-blur-sm text-white text-[10px] font-bold">
+                      <HiOutlineBookOpen className="h-3 w-3" />
+                      5 min read
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4 flex flex-col flex-1">
+
+                    {/* Author row */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="relative shrink-0">
+                        <div className="h-7 w-7 rounded-full p-[1.5px] bg-gradient-to-tr from-orange-500 to-amber-400">
+                          <Image
+                            src={post.authorImage || "https://i.pravatar.cc/100"}
+                            alt={post.author}
+                            width={28}
+                            height={28}
+                            className="h-full w-full rounded-full object-cover ring-2 ring-white dark:ring-stone-950"
+                          />
+                        </div>
+                        <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-stone-950" />
+                      </div>
+                      <span className="text-[11px] font-bold text-stone-700 dark:text-stone-300 truncate">
+                        {post.author}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-sm font-extrabold text-stone-900 dark:text-white leading-snug line-clamp-2 min-h-[2.5rem]
+                      group-hover:text-orange-500 transition-colors">
+                      {post.title}
+                    </h3>
+
+                    {/* Excerpt */}
+                    <p className="text-xs text-stone-500 dark:text-stone-400 mt-2 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                      {post.excerpt || post.description?.substring(0, 120) + "..."}
+                    </p>
+
+                    {/* Spacer */}
+                    <div className="flex-1" />
+
+                    {/* Meta row */}
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-dashed border-stone-200 dark:border-stone-800">
+                      <span className="inline-flex items-center gap-1 text-[11px] text-stone-400 font-medium">
+                        <HiOutlineClock className="h-3.5 w-3.5" />
+                        {formatDate(post.createdAt)}
+                      </span>
+
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer">
+                          <HiOutlineHeart className="h-3.5 w-3.5" />
+                        </span>
+                        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white transition-colors cursor-pointer">
+                          <HiOutlineChatBubbleLeftRight className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Button */}
+                    <Link
+                      href={`/forum/${post._id}`}
+                      className="group/btn mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold
+                        bg-orange-500 text-white hover:bg-orange-600
+                        shadow-md shadow-orange-500/20 hover:shadow-orange-500/40
+                        transition-all duration-300"
+                    >
+                      Read Full Post
+                      <HiOutlineArrowRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-1" />
+                    </Link>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </motion.div>
+        )}
       </div>
     </section>
   );

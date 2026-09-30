@@ -45,3 +45,54 @@ export const api = {
       apiFetch(`/api/favorites/${classId}`, { method: "DELETE" }),
   },
 };
+
+
+
+// // ⭐ Same-origin proxy — cookie cross-domain issue solve করে
+// const API_URL = "/api/proxy";
+
+// // ═══════════════════════════════════════════════════
+// // Generic fetch wrapper
+// // ═══════════════════════════════════════════════════
+// export async function apiFetch(endpoint, options = {}) {
+//   const res = await fetch(`${API_URL}${endpoint}`, {
+//     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+//     credentials: "include",
+//     ...options,
+//   });
+
+//   const data = await res.json();
+//   if (!data.success) {
+//     throw new Error(data.error || "API request failed");
+//   }
+//   return data;
+// }
+
+// // ═══════════════════════════════════════════════════
+// // API Endpoints
+// // ═══════════════════════════════════════════════════
+// export const api = {
+//   classes: {
+//     get: (id) => apiFetch(`/classes/${id}`),
+//     getAll: (params) => apiFetch(`/classes?${new URLSearchParams(params)}`),
+//     featured: () => apiFetch("/classes/featured"),
+//   },
+//   bookings: {
+//     check: (classId) => apiFetch(`/bookings/check/${classId}`),
+//     create: (classId) =>
+//       apiFetch("/bookings", {
+//         method: "POST",
+//         body: JSON.stringify({ classId }),
+//       }),
+//   },
+//   favorites: {
+//     getAll: () => apiFetch("/favorites"),
+//     add: (classId) =>
+//       apiFetch("/favorites", {
+//         method: "POST",
+//         body: JSON.stringify({ classId }),
+//       }),
+//     remove: (classId) =>
+//       apiFetch(`/favorites/${classId}`, { method: "DELETE" }),
+//   },
+// };

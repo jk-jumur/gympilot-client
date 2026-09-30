@@ -1,23 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import { authClient } from "@/lib/auth-client";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
   const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = "/";
-        },
-      },
-    });
+    try {
+      await authClient.signOut();
+      // History replace + refresh — back button dashboard
+      router.replace("/");
+      router.refresh();
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   return (
