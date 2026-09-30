@@ -45,28 +45,23 @@ export default function BookingCard({ cls }) {
   const checking = checkingBooking || checkingFavorite;
 
   async function handleBook() {
-    if (!user) {
-      toast.error("Please login to book this class");
-      router.push(`/login?redirect=/classes/${cls._id}`);
-      return;
-    }
-
-    if (isBooked) {
-      toast.error("You have already booked this class");
-      return;
-    }
-
-    setBooking(true);
-    try {
-      await api.bookings.create(cls._id);
-      setIsBooked(true);
-      toast.success("Successfully booked! Check your dashboard.");
-    } catch (err) {
-      toast.error(err.message || "Booking failed");
-    } finally {
-      setBooking(false);
-    }
+  if (!user) {
+    toast.error("Please login to book this class");
+    router.push(`/login?redirect=/classes/${cls._id}`);
+    return;
   }
+
+  if (isBooked) {
+    toast.error("You have already booked this class");
+    return;
+  }
+
+  // ⭐ Redirect to payment page
+  router.push(`/payment/${cls._id}`);
+}
+
+
+
 
   async function handleFavorite() {
     if (!user) {
