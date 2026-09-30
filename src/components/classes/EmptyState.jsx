@@ -1,0 +1,31 @@
+"use client";
+
+import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+
+export default function EmptyState({ onClear }) {
+  return (
+    <div className="text-center py-20">
+      <div className="inline-flex h-16 w-16 rounded-full bg-stone-100 dark:bg-stone-900 items-center justify-center mb-4">
+        <HiOutlineMagnifyingGlass className="h-8 w-8 text-stone-400" />
+      </div>
+
+      <h3 className="text-lg font-bold text-stone-900 dark:text-white mb-2">
+        No classes found
+      </h3>
+      <p className="text-sm text-stone-500 dark:text-stone-400 max-w-md mx-auto mb-6">
+        We couldn't find any classes matching your search. Try adjusting your
+        filters or search term.
+      </p>
+
+      <button
+        onClick={onClear}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold
+          bg-orange-500 text-white hover:bg-orange-600
+          shadow-md shadow-orange-500/20 hover:shadow-orange-500/40
+          transition-all duration-300"
+      >
+        Clear all filters
+      </button>
+    </div>
+  );
+}
