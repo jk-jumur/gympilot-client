@@ -4,6 +4,7 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FcCallback } from "react-icons/fc";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -55,6 +56,13 @@ export default function RegisterPage() {
       setError("Something went wrong. Please try again.");
     }
   };
+
+   const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+        callbackURL: "/",
+   })
+   }
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
@@ -253,7 +261,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Google */}
-            <button
+            <button onClick={handleGoogleSignIn}
               type="button"
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#FED7AA] bg-white py-3 text-sm font-semibold text-[#404040] shadow-sm transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
             >

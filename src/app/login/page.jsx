@@ -23,6 +23,13 @@ export default function LoginPage() {
     });
   };
 
+   const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+    provider: "google",
+         callbackURL:"/",
+   })
+   }
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
       <div className="w-full max-w-5xl overflow-hidden rounded-3xl border border-[#E7E5E4] bg-white shadow-[0_20px_60px_rgba(23,23,23,0.08)] grid grid-cols-1 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] lg:grid-cols-2">
@@ -207,7 +214,7 @@ export default function LoginPage() {
             </div>
 
             {/* Google Button */}
-            <button
+            <button  onClick={handleGoogleSignIn}
               type="button"
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#FED7AA] bg-white py-3 text-sm font-semibold text-[#404040] shadow-sm transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
             >
