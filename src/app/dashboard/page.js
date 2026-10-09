@@ -1,11 +1,10 @@
+import UserOverview from "@/components/dashboard/user/UserOverview";
 
 
 const DashboardHomePage = () => {
-    return (
-        <div>
-            homepage
-        </div>
-    );
+    return <UserOverview/>;
+       
+    
 };
 
 export default DashboardHomePage;
