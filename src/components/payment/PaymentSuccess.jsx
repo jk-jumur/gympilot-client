@@ -1,8 +1,10 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { toast } from "@/lib/toast";
 import {
   HiOutlineCheckCircle,
   HiOutlineArrowRight,
@@ -10,18 +12,45 @@ import {
   HiOutlineCalendarDays,
 } from "react-icons/hi2";
 
-export default function PaymentSuccess({ cls }) {
+const API = process.env.NEXT_PUBLIC_API_URL;
 
+export default function PaymentSuccess() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const savedRef = useRef(false);
 
+  // ✅ session_id পড়ে backend এ verify call করো + booking save
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id");
+    if (!sessionId || savedRef.current) return;
+    savedRef.current = true;
+
+    const verify = async () => {
+      try {
+        const res = await fetch(
+          `${API}/api/payments/verify/${sessionId}`,
+          { credentials: "include" }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Verify failed");
+        if (data.paid) toast.success("Booking confirmed!");
+      } catch (err) {
+        console.error("Verify error:", err);
+        toast.error("Could not confirm booking, please check dashboard");
+      }
+    };
+
+    verify();
+  }, [searchParams]);
+
+  // ✅ Auto redirect 3 sec
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/dashboard/booked-classes");
     }, 3000);
-
     return () => clearTimeout(timer);
   }, [router]);
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 px-4 py-16">
       <motion.div
@@ -30,7 +59,6 @@ export default function PaymentSuccess({ cls }) {
         transition={{ duration: 0.5 }}
         className="max-w-md w-full text-center"
       >
-        {/* Success Icon */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -45,11 +73,7 @@ export default function PaymentSuccess({ cls }) {
         </h1>
 
         <p className="text-sm text-stone-500 dark:text-stone-400 mb-8">
-          Your booking for{" "}
-          <span className="font-bold text-stone-700 dark:text-stone-300">
-            {cls?.name}
-          </span>{" "}
-          has been confirmed.
+          Your booking has been confirmed. Redirecting to your dashboard...
         </p>
 
         <div className="space-y-3">

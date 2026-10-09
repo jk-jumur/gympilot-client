@@ -38,7 +38,7 @@ export default function PaymentClient({ classId, user }) {
     };
   }, [classId, router]);
 
-  // ⭐⭐⭐ STRIPE CHECKOUT
+  // ⭐ STRIPE CHECKOUT
   async function handlePayment() {
     setPaying(true);
     try {
@@ -54,8 +54,11 @@ export default function PaymentClient({ classId, user }) {
 
       const data = await res.json();
 
-      if (!data.success) {
-        throw new Error(data.error || "Failed to create checkout session");
+      if (!res.ok || !data.success) {
+        // ✅ data.message ও handle করো
+        throw new Error(
+          data.message || data.error || "Failed to create checkout session"
+        );
       }
 
       // ⭐ Redirect to Stripe Checkout
@@ -72,11 +75,8 @@ export default function PaymentClient({ classId, user }) {
   return (
     <div className="min-h-screen bg-stone-50 dark:bg-stone-950 py-10 sm:py-16">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <PaymentHeader />
-
         <PaymentSummary cls={cls} />
-
         <PaymentButton
           price={cls.price}
           paying={paying}
@@ -92,7 +92,6 @@ export default function PaymentClient({ classId, user }) {
           </p>
         )}
 
-        {/* Stripe info */}
         <div className="mt-8 p-5 rounded-2xl bg-orange-500/5 border border-orange-500/20">
           <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-relaxed">
             <strong className="text-orange-600 dark:text-orange-400">
