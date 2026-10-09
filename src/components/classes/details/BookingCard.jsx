@@ -37,7 +37,12 @@ export default function BookingCard({ cls }) {
   const user = session?.user;
 
   const { isBooked, setIsBooked, loading: checkingBooking } = useBookingStatus(cls._id);
-  const { isFavorite, setIsFavorite, loading: checkingFavorite } = useFavoriteStatus(cls._id);
+ const {
+  isFavorite,
+  setIsFavorite,
+  favoriteId,
+  loading: checkingFavorite,
+} = useFavoriteStatus(cls._id);
 
   const [booking, setBooking] = useState(false);
   const [favoriting, setFavoriting] = useState(false);
@@ -62,31 +67,31 @@ export default function BookingCard({ cls }) {
 
 
 
-
-  async function handleFavorite() {
-    if (!user) {
-      toast.error("Please login to save favorites");
-      router.push(`/login?redirect=/classes/${cls._id}`);
-      return;
-    }
-
-    setFavoriting(true);
-    try {
-      if (isFavorite) {
-        await api.favorites.remove(cls._id);
-        setIsFavorite(false);
-        toast.success("Removed from favorites");
-      } else {
-        await api.favorites.add(cls._id);
-        setIsFavorite(true);
-        toast.success("Successfully added to your favorites!");
-      }
-    } catch (err) {
-      toast.error(err.message || "Action failed");
-    } finally {
-      setFavoriting(false);
-    }
+async function handleFavorite() {
+  if (!user) {
+    toast.error("Please login to save favorites");
+    router.push(`/login?redirect=/classes/${cls._id}`);
+    return;
   }
+
+  setFavoriting(true);
+  try {
+    if (isFavorite && favoriteId) {
+      await api.favorites.remove(favoriteId);
+      setIsFavorite(false);
+      toast.success("Removed from favorites");
+    } else {
+      await api.favorites.add(cls);
+      setIsFavorite(true);
+      toast.success("Successfully added to your favorites!");
+    }
+  } catch (err) {
+    toast.error(err.message || "Action failed");
+  } finally {
+    setFavoriting(false);
+  }
+}
+  
 
   return (
     // ⭐ lg:sticky — only on desktop, no jump on mobile
@@ -186,7 +191,7 @@ export default function BookingCard({ cls }) {
         {/* Included List */}
         <div className="px-6 pb-6 pt-2 border-t border-stone-100 dark:border-stone-800">
           <p className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-3">
-            What's included
+            Whats included
           </p>
           <ul className="space-y-2.5">
             {INCLUDED.map((text) => (
