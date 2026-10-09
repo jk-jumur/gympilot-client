@@ -14,8 +14,7 @@ const QUICK_LINKS = [
   { label: "Home", href: "/" },
   { label: "All Classes", href: "/classes" },
   { label: "Community Forum", href: "/forum" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact", href: "/contact" },
+ 
 ];
 
 const SOCIAL_LINKS = [

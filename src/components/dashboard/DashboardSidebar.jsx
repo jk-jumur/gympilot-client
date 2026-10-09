@@ -20,27 +20,27 @@ import {
 // 🎯 ৩ role-এর জন্য ৩টা menu
 const MENU_BY_ROLE = {
   user: [
-    { label: "Overview",       href: "/dashboard",                icon: HiOutlineHome },
-    { label: "Booked Classes", href: "/dashboard/booked-classes", icon: HiOutlineCalendarDays },
-    { label: "Favorites",      href: "/dashboard/favorites",      icon: HiOutlineHeart },
-    { label: "Apply as Trainer", href: "/dashboard/apply-trainer", icon: HiOutlineUserPlus },
+    { label: "Overview",         href: "/dashboard",                icon: HiOutlineHome },
+    { label: "Booked Classes",   href: "/dashboard/booked-classes", icon: HiOutlineCalendarDays },
+    { label: "Favorites",        href: "/dashboard/favorites",      icon: HiOutlineHeart },
+    { label: "Apply as Trainer", href: "/dashboard/apply-trainer",  icon: HiOutlineUserPlus },
   ],
   trainer: [
-    { label: "Overview",      href: "/dashboard",             icon: HiOutlineHome },
-    { label: "Add Class",     href: "/dashboard/add-class",   icon: HiOutlineAcademicCap },
-    { label: "My Classes",    href: "/dashboard/my-classes",  icon: HiOutlineSquares2X2 },
-    { label: "Add Post",      href: "/dashboard/add-post",    icon: HiOutlineChatBubbleLeftRight },
-    { label: "My Posts",      href: "/dashboard/my-posts",    icon: HiOutlineClipboardDocumentCheck },
+    { label: "Overview",   href: "/dashboard/trainer",             icon: HiOutlineHome },
+    { label: "Add Class",  href: "/dashboard/trainer/add-class",   icon: HiOutlineAcademicCap },
+    { label: "My Classes", href: "/dashboard/trainer/my-classes",  icon: HiOutlineSquares2X2 },
+    { label: "Add Post",   href: "/dashboard/trainer/add-post",    icon: HiOutlineChatBubbleLeftRight },
+    { label: "My Posts",   href: "/dashboard/trainer/my-posts",    icon: HiOutlineClipboardDocumentCheck },
   ],
   admin: [
-    { label: "Overview",        href: "/dashboard",                  icon: HiOutlineHome },
-    { label: "Manage Users",    href: "/dashboard/manage-users",     icon: HiOutlineUsers },
-    { label: "Applied Trainers",href: "/dashboard/applied-trainers", icon: HiOutlineClipboardDocumentCheck },
-    { label: "Manage Trainers", href: "/dashboard/manage-trainers",  icon: HiOutlineShieldCheck },
-    { label: "Manage Classes",  href: "/dashboard/manage-classes",   icon: HiOutlineAcademicCap },
-    { label: "Add Post",        href: "/dashboard/add-post",         icon: HiOutlineChatBubbleLeftRight },
-    { label: "Manage Posts",    href: "/dashboard/manage-posts",     icon: HiOutlineClipboardDocumentCheck },
-    { label: "Transactions",    href: "/dashboard/transactions",     icon: HiOutlineCurrencyDollar },
+    { label: "Overview",         href: "/dashboard/admin",                  icon: HiOutlineHome },
+    { label: "Manage Users",     href: "/dashboard/admin/manage-users",     icon: HiOutlineUsers },
+    { label: "Applied Trainers", href: "/dashboard/admin/applied-trainers", icon: HiOutlineClipboardDocumentCheck },
+    { label: "Manage Trainers",  href: "/dashboard/admin/manage-trainers",  icon: HiOutlineShieldCheck },
+    { label: "Manage Classes",   href: "/dashboard/admin/manage-classes",   icon: HiOutlineAcademicCap },
+    { label: "Add Post",         href: "/dashboard/admin/add-post",         icon: HiOutlineChatBubbleLeftRight },
+    { label: "Manage Posts",     href: "/dashboard/admin/manage-posts",     icon: HiOutlineClipboardDocumentCheck },
+    { label: "Transactions",     href: "/dashboard/admin/transactions",     icon: HiOutlineCurrencyDollar },
   ],
 };
 
@@ -66,62 +66,62 @@ export default function DashboardSidebar({ user, isOpen, onClose }) {
           flex flex-col transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
-        {/* ═══ LOGO ═══ */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-stone-200 dark:border-stone-800">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 no-underline group"
-            aria-label="GymPilot Home"
-          >
-            {/* Logo Icon */}
-            <div className="relative h-10 w-10 shrink-0 rounded-xl 
-              bg-linear-to-br from-orange-500 via-orange-500 to-amber-500
-              flex items-center justify-center
-              shadow-lg shadow-orange-500/30
-              transition-all duration-300
-              group-hover:scale-105 group-hover:shadow-orange-500/50
-              group-hover:rotate-[5deg]">
+      {/* ═══ LOGO ═══ */}
+<div className="h-16 flex items-center justify-between px-4 border-b border-stone-200 dark:border-stone-800">
+  <Link
+    href="/"
+    className="flex items-center gap-2.5 no-underline group"
+    aria-label="GymPilot Home"
+  >
+    {/* Logo Icon */}
+    <div className="relative h-10 w-10 shrink-0 rounded-xl 
+      bg-gradient-to-br from-orange-500 via-orange-500 to-amber-500
+      flex items-center justify-center
+      shadow-lg shadow-orange-500/30
+      transition-all duration-300
+      group-hover:scale-105 group-hover:shadow-orange-500/50
+      group-hover:rotate-[5deg]">
 
-              {/* Glow ring on hover */}
-              <span className="absolute inset-0 rounded-xl bg-linear-to-br from-orange-400 to-amber-400 opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-300" />
+      {/* Glow ring on hover */}
+      <span className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-300" />
 
-              {/* Lightning + spark dots SVG */}
-              <svg
-                className="relative h-5 w-5 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.5 2L4 14h7.5L10.5 22L20 10h-7.5L13.5 2Z"
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                />
-                <circle cx="19" cy="5" r="1" fill="currentColor" />
-                <circle cx="5" cy="19" r="1" fill="currentColor" />
-              </svg>
-            </div>
+      {/* Lightning + spark dots SVG */}
+      <svg
+        className="relative h-5 w-5 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M13.5 2L4 14h7.5L10.5 22L20 10h-7.5L13.5 2Z"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        <circle cx="19" cy="5" r="1" fill="currentColor" />
+        <circle cx="5" cy="19" r="1" fill="currentColor" />
+      </svg>
+    </div>
 
-            {/* Logo Text */}
-            <div className="flex items-baseline text-lg font-black tracking-tight whitespace-nowrap">
-              <span className="text-stone-900 dark:text-white">Gym</span>
-              <span className="bg-linear-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
-                Pilot
-              </span>
-            </div>
-          </Link>
+    {/* Logo Text */}
+    <div className="flex items-baseline text-lg font-black tracking-tight whitespace-nowrap">
+      <span className="text-stone-900 dark:text-white">Gym</span>
+      <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+        Pilot
+      </span>
+    </div>
+  </Link>
 
-          {/* Close (mobile) */}
-          <button
-            onClick={onClose}
-            className="md:hidden p-1.5 rounded-lg text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-            aria-label="Close sidebar"
-          >
-            <HiOutlineXMark className="h-5 w-5" />
-          </button>
-        </div>
+  {/* Close (mobile) */}
+  <button
+    onClick={onClose}
+    className="md:hidden p-1.5 rounded-lg text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+    aria-label="Close sidebar"
+  >
+    <HiOutlineXMark className="h-5 w-5" />
+  </button>
+</div>
 
         {/* ═══ Role label ═══ */}
         <p className="px-5 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-stone-400">
