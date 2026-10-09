@@ -11,39 +11,56 @@ export async function apiFetch(endpoint, options = {}) {
   });
 
   const data = await res.json();
-  if (!data.success) {
-    throw new Error(data.error || "API request failed");
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || data.error || "API request failed");
   }
   return data;
 }
 
 // ═══════════════════════════════════════════════════════
-// API Endpoints
+// API Endpoints 
 // ═══════════════════════════════════════════════════════
 export const api = {
   classes: {
     get: (id) => apiFetch(`/api/classes/${id}`),
-    getAll: (params) => apiFetch(`/api/classes?${new URLSearchParams(params)}`),
-    featured: () => apiFetch("/api/classes/featured"),
+    getAll: (params) =>
+      apiFetch(`/api/classes?${new URLSearchParams(params)}`),
+    featured: () => apiFetch(`/api/classes/featured`),
   },
+
   bookings: {
     check: (classId) => apiFetch(`/api/bookings/check/${classId}`),
-    create: (classId) =>
-      apiFetch("/api/bookings", {
+    getAll: () => apiFetch(`/api/bookings`),
+    create: (data) =>
+      apiFetch(`/api/bookings`, {
         method: "POST",
-        body: JSON.stringify({ classId }),
+        body: JSON.stringify(data),
       }),
   },
+
   favorites: {
-    getAll: () => apiFetch("/api/favorites"),
-    add: (classId) =>
-      apiFetch("/api/favorites", {
+    getAll: () => apiFetch(`/api/favorites`),
+    add: (cls) =>
+      apiFetch(`/api/favorites`, {
         method: "POST",
-        body: JSON.stringify({ classId }),
+        body: JSON.stringify({
+          classId: cls._id,
+          className: cls.className,
+          trainerName: cls.trainerName,
+          price: cls.price,
+          image: cls.image,
+        }),
       }),
-    remove: (classId) =>
-      apiFetch(`/api/favorites/${classId}`, { method: "DELETE" }),
+    remove: (id) =>
+      apiFetch(`/api/favorites/${id}`, { method: "DELETE" }),
+  },
+
+  applications: {
+    getMy: () => apiFetch(`/api/trainer-applications/me`),
+    create: (data) =>
+      apiFetch(`/api/trainer-applications`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
   },
 };
-
-

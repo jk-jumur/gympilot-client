@@ -9,6 +9,7 @@ export function useFavoriteStatus(classId) {
   const user = session?.user;
 
   const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteId, setFavoriteId] = useState(null);   
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,11 +27,16 @@ export function useFavoriteStatus(classId) {
     async function check() {
       try {
         const data = await api.favorites.getAll();
-        const isFav = data.data.some((f) => f.classId === classId);
-        if (!cancelled) setIsFavorite(isFav);
+        const fav = (data?.data || []).find((f) => f.classId === classId);
+        if (!cancelled) {
+          setIsFavorite(!!fav);
+          setFavoriteId(fav?._id || null);              
+        }
       } catch (err) {
-        // ⭐ Silent fail
-        if (!cancelled) setIsFavorite(false);
+        if (!cancelled) {
+          setIsFavorite(false);
+          setFavoriteId(null);                        
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -42,5 +48,6 @@ export function useFavoriteStatus(classId) {
     };
   }, [classId, user, isPending]);
 
-  return { isFavorite, setIsFavorite, loading };
+  return { isFavorite, setIsFavorite, favoriteId, setFavoriteId, loading };
+                                       
 }
