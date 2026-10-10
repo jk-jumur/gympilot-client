@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// ⭐ Same-origin URL — rewrites proxy handle করবে
+const API = "";
 
 export default function BookedClasses() {
   const [bookings, setBookings] = useState([]);
@@ -14,7 +15,7 @@ export default function BookedClasses() {
     const fetchBookings = async () => {
       try {
         const res = await fetch(
-          `${API}/api/bookings`,                                    
+          `${API}/api/bookings`,       // = "/api/bookings" → same-origin ✅
           { credentials: "include" }
         );
         const data = await res.json();
