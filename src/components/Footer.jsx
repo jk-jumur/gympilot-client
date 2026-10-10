@@ -9,6 +9,7 @@ import {
   HiOutlineArrowUp,
 } from "react-icons/hi2";
 import { FaXTwitter, FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
@@ -24,6 +25,7 @@ const SOCIAL_LINKS = [
   { icon: FaYoutube, href: "https://youtube.com", label: "YouTube", color: "hover:bg-red-600 hover:border-red-500 hover:text-white" },
 ];
 
+
 export default function Footer() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -35,6 +37,11 @@ export default function Footer() {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
+
+    const pathname = usePathname();
+  if (pathname.includes("dashboard")) {
+    return null;
+  }
   return (
     <footer className="relative overflow-hidden
       bg-stone-100 dark:bg-black

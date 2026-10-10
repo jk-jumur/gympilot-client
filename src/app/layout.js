@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -16,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
- title: {
-  default: "GymPilot — Fitness & Gym Management Platform",
-  template: "%s | GymPilot",
-}
+  title: {
+    default: "GymPilot — Fitness & Gym Management Platform",
+    template: "%s | GymPilot",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -29,14 +28,16 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"   >
-          <Navbar/>
-
-         <Providers>
-          {children}
+      <body className="min-h-full w-full flex flex-col bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100 transition-colors">
+      
+        <Providers>
+          <Navbar />
+          <main className="w-full flex-1">
+            {children}
+          </main>
+          <Footer />
         </Providers>
-         <Footer/>
-        </body>
+      </body>
     </html>
   );
 }

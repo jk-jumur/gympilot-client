@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { toast } from "@/lib/toast";
 import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import UpdateClassModal from "./UpdateClassModal";
@@ -69,6 +70,8 @@ export default function MyClasses() {
           <table className="w-full text-left">
             <thead className="bg-gray-100 text-gray-700 text-sm">
               <tr>
+                {/* NEW: Image column */}
+                <th className="p-4 w-20">Image</th>
                 <th className="p-4">Class Name</th>
                 <th className="p-4">Category</th>
                 <th className="p-4">Price</th>
@@ -79,6 +82,25 @@ export default function MyClasses() {
             <tbody>
               {classes.map((c) => (
                 <tr key={c._id} className="border-t hover:bg-gray-50">
+                  {/*  NEW: Image cell */}
+                  <td className="p-4">
+                    <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                      {c.image ? (
+                        <Image
+                          src={c.image}
+                          alt={c.className || c.name || "Class"}
+                          fill
+                          sizes="56px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400 text-[10px] font-semibold">
+                          No Image
+                        </div>
+                      )}
+                    </div>
+                  </td>
+
                   <td className="p-4 font-medium text-gray-800">
                     {c.className || c.name}
                   </td>

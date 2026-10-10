@@ -74,7 +74,7 @@ const Banner = () => {
               className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2"
             >
               <Link
-                href="/all-classes"
+                href="/classes"
                 className="inline-flex justify-center items-center gap-2 px-8 py-4 text-base font-bold rounded-2xl text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/20 transition-all duration-300 transform hover:-translate-y-0.5 group"
               >
                 <span>Explore Classes</span>

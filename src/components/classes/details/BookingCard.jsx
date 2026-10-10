@@ -61,7 +61,7 @@ export default function BookingCard({ cls }) {
     return;
   }
 
-  // ⭐ Redirect to payment page
+  //  Redirect to payment page
   router.push(`/payment/${cls._id}`);
 }
 
@@ -94,7 +94,7 @@ async function handleFavorite() {
   
 
   return (
-    // ⭐ lg:sticky — only on desktop, no jump on mobile
+    // lg:sticky — only on desktop, no jump on mobile
     <div className="lg:sticky lg:top-24 space-y-4">
 
       {/* Main Booking Card */}
