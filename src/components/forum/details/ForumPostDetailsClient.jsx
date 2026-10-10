@@ -22,7 +22,7 @@ export default function ForumPostDetailsClient({ id, user }) {
     async function fetchPost() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${id}`,
+          `/api/forum/${id}`,
           { credentials: "include" }
         );
         const data = await res.json();

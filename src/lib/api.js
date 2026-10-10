@@ -1,5 +1,5 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+// Client-side API calls use relative URLs — proxied via Next.js rewrites in production
+const API_URL = "";
 
 // ═══════════════════════════════════════════════════════
 // Generic fetch wrapper

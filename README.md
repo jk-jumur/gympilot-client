@@ -99,7 +99,7 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 ### Frontend
 | Category | Technology |
 |---|---|
-| **Framework** | Next.js 15 (App Router) |
+| **Framework** | Next.js 16.3.6 (App Router) |
 | **Language** | JavaScript (ES2024) |
 | **Styling** | Tailwind CSS v4 |
 | **UI Library** | HeroUI |

@@ -43,7 +43,7 @@ export default function PaymentClient({ classId, user }) {
     setPaying(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/payments/create-checkout-session`,
+        `/api/payments/create-checkout-session`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

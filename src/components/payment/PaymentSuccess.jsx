@@ -12,7 +12,7 @@ import {
   HiOutlineCalendarDays,
 } from "react-icons/hi2";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+
 
 export default function PaymentSuccess() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function PaymentSuccess() {
     const verify = async () => {
       try {
         const res = await fetch(
-          `${API}/api/payments/verify/${sessionId}`,
+          `/api/payments/verify/${sessionId}`,
           { credentials: "include" }
         );
         const data = await res.json();

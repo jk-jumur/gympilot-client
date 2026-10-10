@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { HiOutlineHeart, HiOutlineHandThumbDown } from "react-icons/hi2";
 import { toast } from "@/lib/toast";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = ""; // Relative URLs — proxied via Next.js rewrites
 
 export default function PostActions({ post, user, setPost }) {
   const router = useRouter();
