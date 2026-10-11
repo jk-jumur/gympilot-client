@@ -10,7 +10,7 @@ import {
   HiOutlineArrowTrendingUp,
   HiOutlineArrowTrendingDown,
   HiOutlineCalendarDays,
-  HiOutlineUser,
+ 
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
 } from "react-icons/hi2";

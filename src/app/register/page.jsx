@@ -4,7 +4,8 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FcCallback } from "react-icons/fc";
+import { toast } from "@/lib/toast"; 
+
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -13,7 +14,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
-
+const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -23,46 +24,74 @@ export default function RegisterPage() {
     return regex.test(pass);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    if (!validatePassword(password)) {
-      setError(
-        "Password must be at least 6 characters long and contain both uppercase and lowercase letters."
-      );
-      return;
-    }
+  // ⭐ Validation with toast
+  if (!name || !email || !password) {
+    toast.error("Please fill in all fields");
+    return;
+  }
 
-    try {
-      await authClient.signUp.email(
-        {
-          email,
-          password,
-          name,
-          image: image || undefined,
-           
-        },
-        {
-          onSuccess: () => {
+  if (!validatePassword(password)) {
+    toast.error(
+      "Password must be at least 6 characters with uppercase & lowercase"
+    );
+    setError(
+      "Password must be at least 6 characters long and contain both uppercase and lowercase letters."
+    );
+    return;
+  }
+
+  setLoading(true);
+  try {
+    await authClient.signUp.email(
+      {
+        email,
+        password,
+        name,
+        image: image || undefined,
+      },
+      {
+        onSuccess: () => {
+          // ⭐ Success toast
+          toast.success(
+            `Account created! Welcome, ${name}!`,
+            { duration: 3000, icon: "🎉" }
+          );
+
+          // ⭐ Delay so user sees toast
+          setTimeout(() => {
             router.push("/");
-          },
-          onError: (ctx) => {
-            setError(ctx.error.message);
-          },
-        }
-      );
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    }
-  };
+            router.refresh();
+          }, 800);
+        },
+        onError: (ctx) => {
+          setError(ctx.error.message);
+          toast.error(ctx.error.message || "Registration failed");   
+          setLoading(false);
+        },
+      }
+    );
+  } catch (err) {
+    setError("Something went wrong. Please try again.");
+    toast.error("Something went wrong. Please try again.");  
+    setLoading(false);
+  }
+};
 
-   const handleGoogleSignIn = async () => {
+const handleGoogleSignIn = async () => {
+  try {
+    toast.loading("Redirecting to Google...", { duration: 2000 });   
     await authClient.signIn.social({
       provider: "google",
-        callbackURL: "/",
-   })
-   }
+      callbackURL: "/",
+    });
+  } catch (err) {
+    toast.error("Google signup failed");   
+  }
+};
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">

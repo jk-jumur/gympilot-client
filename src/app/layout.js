@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,23 @@ export default function RootLayout({ children }) {
           </main>
           <Footer />
         </Providers>
+
+         <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: "var(--bg-secondary, #fff)",
+              color: "var(--text-primary, #171717)",
+              border: "1px solid var(--border, #E7E5E4)",
+              borderRadius: "12px",
+              padding: "12px 18px",
+              fontSize: "14px",
+              fontWeight: "600",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+            },
+          }}
+        />
       </body>
     </html>
   );

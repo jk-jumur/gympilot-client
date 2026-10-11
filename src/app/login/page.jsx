@@ -1,34 +1,74 @@
-
-
 "use client";
 
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";       
+import { toast } from "@/lib/toast";               
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);    
+
+  const router = useRouter();                        
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { data, error } = await authClient.signIn.email({
-      email,
-      password,
-      callbackURL: "/",
-    });
+    // ⭐ Validation
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message || "Invalid credentials");   
+        setLoading(false);
+        return;
+      }
+
+      // ⭐ Success toast
+      toast.success(
+        `Welcome back${data?.user?.name ? `, ${data.user.name}` : ""}!`,
+        { duration: 3000, icon: "🎉" }
+      );
+
+      // ⭐ Delay so user sees toast
+      setTimeout(() => {
+        router.push("/");
+        router.refresh();
+      }, 600);
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again.");   
+      setLoading(false);
+    }
   };
 
-   const handleGoogleSignIn = async () => {
-    await authClient.signIn.social({
-    provider: "google",
-         callbackURL:"/",
-   })
-   }
+  const handleGoogleSignIn = async () => {
+    try {
+      toast.loading("Redirecting to Google...", { duration: 2000 });   
+      
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+      });
+    } catch (err) {
+      toast.error("Google login failed");      
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
@@ -37,11 +77,9 @@ export default function LoginPage() {
         {/* ================= LEFT SIDE ================= */}
         <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#EA580C] via-[#F97316] to-[#F59E0B] p-10 text-white dark:from-[#1A1A1A] dark:via-[#1F120B] dark:to-[#2A1500]">
           
-          {/* Decorative blobs */}
           <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-white/10 blur-3xl dark:bg-[#FF4D00]/10" />
           <div className="pointer-events-none absolute -left-12 -bottom-12 h-64 w-64 rounded-full bg-black/10 blur-3xl dark:bg-[#FF4D00]/5" />
 
-          {/* Logo */}
           <div className="relative z-10">
             <Link href="/" className="group flex items-center gap-3 no-underline">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-orange-500 shadow-md transition-transform duration-300 group-hover:scale-105 dark:bg-[#FF4D00] dark:text-white dark:shadow-orange-900/40">
@@ -56,7 +94,6 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Content */}
           <div className="relative z-10 my-auto space-y-6 py-8">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
               Train Smarter. <span className="text-amber-200 dark:text-[#FFB800]">Grow Stronger.</span>
@@ -65,7 +102,6 @@ export default function LoginPage() {
               Discover expert-led classes, book sessions instantly, track your progress, and join a thriving fitness community — all in one place.
             </p>
 
-            {/* Feature pills */}
             <div className="space-y-3 pt-2">
               {[
                 { icon: "🏋️", text: "Book Expert Fitness Classes" },
@@ -85,7 +121,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="relative z-10 text-xs text-orange-100 dark:text-[#666666]">
             &copy; {new Date().getFullYear()} GymPilot. All rights reserved.
           </div>
@@ -94,14 +129,12 @@ export default function LoginPage() {
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex flex-col justify-between bg-white p-8 dark:bg-[#1A1A1A] sm:p-10 lg:p-12">
           
-          {/* Header */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-extrabold tracking-tight text-[#171717] dark:text-white sm:text-3xl">
                 Welcome back
               </h2>
 
-              {/* Mobile Logo */}
               <Link href="/" className="flex items-center gap-2 no-underline lg:hidden">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 text-white shadow-md dark:bg-[#FF4D00]">
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
@@ -120,11 +153,8 @@ export default function LoginPage() {
           </div>
 
           <div className="my-6 space-y-6">
-
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* Email */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-[#404040] dark:text-[#A0A0A0]">
                   Email address
@@ -147,7 +177,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#404040] dark:text-[#A0A0A0]">
@@ -191,19 +220,20 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#F59E0B] py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition-all duration-200 hover:scale-[1.02] dark:bg-[#FF4D00] dark:from-[#FF4D00] dark:to-[#FF4D00] dark:shadow-orange-900/30 dark:hover:bg-[#FF6A1A]"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#F59E0B] py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition-all duration-200 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed dark:bg-[#FF4D00] dark:from-[#FF4D00] dark:to-[#FF4D00] dark:shadow-orange-900/30 dark:hover:bg-[#FF6A1A]"
               >
-                <span>Sign In</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+                <span>{loading ? "Signing in..." : "Sign In"}</span>
+                {!loading && (
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                )}
               </button>
             </form>
 
-            {/* Divider */}
             <div className="relative flex items-center justify-center">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-[#E5E5E5] dark:border-[#2A2A2A]" />
@@ -213,8 +243,7 @@ export default function LoginPage() {
               </span>
             </div>
 
-            {/* Google Button */}
-            <button  onClick={handleGoogleSignIn}
+            <button onClick={handleGoogleSignIn}
               type="button"
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#FED7AA] bg-white py-3 text-sm font-semibold text-[#404040] shadow-sm transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
             >
@@ -228,7 +257,6 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Footer */}
           <div className="text-center text-xs text-[#A3A3A3] dark:text-[#666666] lg:text-left">
             Protected by reCAPTCHA and subject to GymPilots Terms & Privacy.
           </div>
