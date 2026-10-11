@@ -11,7 +11,7 @@ export default function TrainerStatusCard({ application }) {
 
       {!application && (
         <p className="text-gray-500">
-          You haven't applied yet.{" "}
+          You havent applied yet.{" "}
           <Link
             href="/dashboard/apply-trainer"
             className="text-blue-600 underline hover:text-blue-700"

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
 import FavoriteClassCard from "./FavoriteClassCard";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
+
 
 const API = "";
 export default function FavoriteClasses() {
@@ -16,7 +16,7 @@ export default function FavoriteClasses() {
     const fetchFavorites = async () => {
       try {
         const res = await fetch(
-          `${API}/api/favorites`,                                     // ✅ FIXED
+          `${API}/api/favorites`,                                   
           { credentials: "include" }
         );
         const data = await res.json();
@@ -35,7 +35,7 @@ export default function FavoriteClasses() {
   const handleRemove = async (id) => {
     try {
       const res = await fetch(
-        `${API}/api/favorites/${id}`,                                 // ✅ FIXED
+        `${API}/api/favorites/${id}`,                                
         { method: "DELETE", credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to remove");
