@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
 import { HiOutlineUserMinus, HiOutlineSparkles } from "react-icons/hi2";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
+const API = "";
 
 export default function ManageTrainers() {
   const [trainers, setTrainers] = useState([]);

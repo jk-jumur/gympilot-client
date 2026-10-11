@@ -9,7 +9,9 @@ import {
   HiOutlineUsers,
 } from "react-icons/hi2";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
+
+ const API = "";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);

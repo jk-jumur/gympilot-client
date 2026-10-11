@@ -5,8 +5,8 @@ import Link from "next/link";
 import { toast } from "@/lib/toast";
 import { FaTrash } from "react-icons/fa";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
-
+// const API = process.env.NEXT_PUBLIC_API_URL; 
+  const API = "";
 export default function MyPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -6,7 +6,8 @@ import { FaUsers, FaChalkboardTeacher, FaTicketAlt } from "react-icons/fa";
 import StatCard from "@/components/dashboard/user/StatCard";
 import UserProfileCard from "@/components/dashboard/user/UserProfileCard";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = "";
 
 export default function AdminOverview() {
   const { data: session } = useSession();
