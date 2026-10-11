@@ -7,7 +7,7 @@ import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import UpdateClassModal from "./UpdateClassModal";
 import ViewStudentsModal from "./ViewStudentsModal";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
+
  const API = "";
 
 export default function MyClasses() {

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/lib/toast";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
   const API = "";
 
 const CATEGORIES = ["Yoga", "Cardio", "Weights", "CrossFit", "Zumba", "Pilates"];

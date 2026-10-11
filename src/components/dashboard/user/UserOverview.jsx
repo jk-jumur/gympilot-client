@@ -7,7 +7,7 @@ import StatCard from "./StatCard";
 import UserProfileCard from "./UserProfileCard";
 import TrainerStatusCard from "./TrainerStatusCard";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
+
 const API = "";
 
 export default function UserOverview() {

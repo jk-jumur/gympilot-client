@@ -6,7 +6,7 @@ import { FaChalkboardTeacher, FaUsers } from "react-icons/fa";
 import StatCard from "@/components/dashboard/user/StatCard";
 import UserProfileCard from "@/components/dashboard/user/UserProfileCard";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
+
   const API ="";
 
 export default function TrainerOverview() {

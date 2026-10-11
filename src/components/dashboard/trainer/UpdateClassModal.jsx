@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "@/lib/toast";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
   const API = "";
 
 export default function UpdateClassModal({ cls, onClose, onUpdate }) {

@@ -5,7 +5,7 @@ import { toast } from "@/lib/toast";
 import { HiOutlineEye, HiOutlineUserGroup } from "react-icons/hi2";
 import ApplicationDetailsModal from "./ApplicationDetailsModal";
 
-// const API = process.env.NEXT_PUBLIC_API_URL;
+
  const API = "";
 
 export default function AppliedTrainers() {
