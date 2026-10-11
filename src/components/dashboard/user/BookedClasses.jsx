@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-// ⭐ Same-origin URL — rewrites proxy handle করবে
+// ⭐ Same-origin URL — rewrites proxy handle 
 const API = "";
 
 export default function BookedClasses() {

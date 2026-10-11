@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
 import FavoriteClassCard from "./FavoriteClassCard";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
 
+const API = "";
 export default function FavoriteClasses() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
