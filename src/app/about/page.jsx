@@ -1,5 +1,5 @@
 import AboutHero from "@/components/about/AboutHero";
-// import Ecosystem from "@/components/about/Ecosystem";
+import Ecosystem from "@/components/about/Ecosystem";
 import ProblemsSolved from "@/components/about/ProblemsSolved";
 // import PlatformFeatures from "@/components/about/PlatformFeatures";
 // import HowItWorks from "@/components/about/HowItWorks";
@@ -18,7 +18,7 @@ export default function AboutPage() {
   return (
     <main className="w-full">
       <AboutHero />
-      {/* <Ecosystem /> */}
+      <Ecosystem />
       <ProblemsSolved />
       {/* <PlatformFeatures />
       <HowItWorks />
