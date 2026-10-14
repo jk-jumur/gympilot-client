@@ -38,6 +38,7 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "All Classes", href: "/classes" },
     { name: "Community Forum", href: "/forum" },
+    { name: "About Us", href:"/about" },
   ];
 
   const closeMenu = () => {
