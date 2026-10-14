@@ -1,6 +1,6 @@
 import AboutHero from "@/components/about/AboutHero";
 // import Ecosystem from "@/components/about/Ecosystem";
-// import ProblemsSolved from "@/components/about/ProblemsSolved";
+import ProblemsSolved from "@/components/about/ProblemsSolved";
 // import PlatformFeatures from "@/components/about/PlatformFeatures";
 // import HowItWorks from "@/components/about/HowItWorks";
 // import TechStack from "@/components/about/TechStack";
@@ -18,9 +18,9 @@ export default function AboutPage() {
   return (
     <main className="w-full">
       <AboutHero />
-      {/* <Ecosystem />
+      {/* <Ecosystem /> */}
       <ProblemsSolved />
-      <PlatformFeatures />
+      {/* <PlatformFeatures />
       <HowItWorks />
       <TechStack />
       <WhyDifferent />
