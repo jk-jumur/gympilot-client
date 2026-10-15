@@ -2,7 +2,7 @@ import AboutHero from "@/components/about/AboutHero";
 import Ecosystem from "@/components/about/Ecosystem";
 import ProblemsSolved from "@/components/about/ProblemsSolved";
 // import PlatformFeatures from "@/components/about/PlatformFeatures";
-// import HowItWorks from "@/components/about/HowItWorks";
+import HowItWorks from "@/components/about/HowItWorks";
 // import TechStack from "@/components/about/TechStack";
 // import WhyDifferent from "@/components/about/WhyDifferent";
 // import OpenSource from "@/components/about/OpenSource";
@@ -20,12 +20,12 @@ export default function AboutPage() {
       <AboutHero />
       <Ecosystem />
       <ProblemsSolved />
-      {/* <PlatformFeatures />
-      <HowItWorks />
-      <TechStack />
+      {/* <PlatformFeatures /> */}
+       <HowItWorks />
+      {/* <TechStack />
       <WhyDifferent />
       <OpenSource />
-      <GetStarted /> */}
+      <GetStarted />  */}
     </main>
   );
 }
