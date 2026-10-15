@@ -39,6 +39,8 @@ export default function Navbar() {
     { name: "All Classes", href: "/classes" },
     { name: "Community Forum", href: "/forum" },
     { name: "About Us", href:"/about" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Privacy Policy", href: "/privacy-policy"},
   ];
 
   const closeMenu = () => {
