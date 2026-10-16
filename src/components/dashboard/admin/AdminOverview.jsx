@@ -5,9 +5,9 @@ import { useSession } from "@/lib/auth-client";
 import { FaUsers, FaChalkboardTeacher, FaTicketAlt } from "react-icons/fa";
 import StatCard from "@/components/dashboard/user/StatCard";
 import UserProfileCard from "@/components/dashboard/user/UserProfileCard";
+import ChartsSection from "./ChartsSection";  // 👈 ADD
 
-
-  const API = "";
+const API = "";
 
 export default function AdminOverview() {
   const { data: session } = useSession();
@@ -49,16 +49,16 @@ export default function AdminOverview() {
   if (loading) {
     return (
       <div className="p-6 space-y-6">
-        <div className="h-8 w-56 bg-gray-200 animate-pulse rounded-lg" />
+        <div className="h-8 w-56 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-lg" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-24 bg-gray-200 animate-pulse rounded-xl"
+              className="h-24 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-xl"
             />
           ))}
         </div>
-        <div className="h-32 bg-gray-200 animate-pulse rounded-xl" />
+        <div className="h-32 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-xl" />
       </div>
     );
   }
@@ -67,8 +67,10 @@ export default function AdminOverview() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          Admin Dashboard
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-[#A0A0A0] mt-1">
           Platform overview and management hub
         </p>
       </div>
@@ -94,6 +96,9 @@ export default function AdminOverview() {
           color="bg-emerald-500"
         />
       </div>
+
+      {/* 👈 Charts Section */}
+      <ChartsSection />
 
       {/* Profile */}
       <UserProfileCard user={session?.user} role="Admin" />

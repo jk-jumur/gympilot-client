@@ -41,6 +41,7 @@ const MENU_BY_ROLE = {
     { label: "Add Post",         href: "/dashboard/admin/add-post",         icon: HiOutlineChatBubbleLeftRight },
     { label: "Manage Posts",     href: "/dashboard/admin/manage-posts",     icon: HiOutlineClipboardDocumentCheck },
     { label: "Transactions",     href: "/dashboard/admin/transactions",     icon: HiOutlineCurrencyDollar },
+    { label: "Contact Messages", href: "/dashboard/admin/messages",  icon: HiOutlineChatBubbleLeftRight },
   ],
 };
 
