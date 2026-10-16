@@ -41,6 +41,7 @@ export default function Navbar() {
     { name: "About Us", href:"/about" },
     { name: "Terms & Conditions", href: "/terms" },
     { name: "Privacy Policy", href: "/privacy-policy"},
+    { name: "Contact Us", href: "/contact" },
   ];
 
   const closeMenu = () => {
