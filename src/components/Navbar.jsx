@@ -38,7 +38,7 @@ export default function Navbar() {
     };
   }, [isMenuOpen]);
 
-  const handleSignOut = async () => {
+const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => router.push("/login"),

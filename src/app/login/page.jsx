@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/lib/toast";
-import { DEMO_CREDENTIALS } from "@/config/demoCredentials";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -17,16 +17,7 @@ export default function LoginPage() {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  // 🎯 Demo fill handler
-  const handleDemoFill = (roleKey) => {
-    const cred = DEMO_CREDENTIALS[roleKey];
-    setEmail(cred.email);
-    setPassword(cred.password);
-    toast.success(`${cred.role} credentials filled!`, {
-      duration: 2000,
-      icon: "✅",
-    });
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,37 +155,7 @@ export default function LoginPage() {
           <div className="my-6 space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* ⭐ QUICK DEMO LOGIN — 2 Buttons */}
-              <div className="space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Quick Demo Login
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleDemoFill("admin")}
-                    className="rounded-lg border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
-                  >
-                    Admin
-                  </button>
-
-                     
-              <button
-             type="button"
-             onClick={() => handleDemoFill("trainer")}
-            className="rounded-lg border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
-           >
-           Trainer
-            </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDemoFill("user")}
-                    className="rounded-lg border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
-                  >
-                    User
-                  </button>
-                </div>
-              </div>
+          
 
               {/* Email */}
               <div className="space-y-1.5">

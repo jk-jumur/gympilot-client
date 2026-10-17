@@ -22,7 +22,7 @@ A production-ready full-stack platform connecting fitness enthusiasts, professio
 
 ## 📖 Overview
 
-**GymPilot** is a comprehensive fitness management ecosystem built with modern web technologies. It serves three distinct user roles — **Members**, **Trainers**, and **Admins** — each with dedicated dashboards and workflows.
+**GymPilot** is a comprehensive fitness management ecosystem built with modern web technologies. It serves three distinct user roles — **Users**, **Trainers**, and **Admins** — each with dedicated dashboards and workflows.
 
 From discovering classes and booking sessions via **Stripe**, to trainer approval workflows, to platform-wide moderation — GymPilot handles the complete lifecycle of a fitness platform.
 
@@ -31,18 +31,20 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 - 🎯 **Production-Grade Architecture** — Clean separation of concerns, role-based access control, secure session management
 - 💳 **Real Payment Integration** — Stripe Checkout with automated booking creation on payment success
 - 🔐 **Security-First** — HTTPOnly cookies, session verification middleware, role-based route protection
-- 🎨 **Polished UI/UX** — Dark/Light theme, Framer Motion animations, skeleton loaders, toast notifications
+- 🎨 **Polished UI/UX** — Dark/Light theme, Framer Motion animations, skeleton loaders, toast notifications, **Animated Global Loader**
 - 📱 **Fully Responsive** — Mobile, tablet, and desktop optimized
+- ⚡ **Smart Data Tables** — Sortable, Filterable, and Paginated admin tables
 
 ---
 
 ## 🔑 Test Credentials
 
+> **Note:** Demo accounts are pre-seeded for quick testing.
+
 | Role | Email | Password | Access |
 |------|-------|----------|--------|
-| 
-| **Trainer** | `trainer@test.com` | `Test1234` | Class management |
-| **User** | `user@test.com` | `Test1234` | Book classes, apply as trainer |
+| **Admin** | `admin@gympilot.com` | `Password123` | Full platform control |
+| **User** | `user@gympilot.com` | `Password123` | Book classes, apply as trainer |
 
 ---
 
@@ -57,15 +59,19 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 - **All Classes** — MongoDB `$regex` search + category `$in` filter + server-side pagination
 - **Community Forum** — Public post browsing with server-side pagination
 - **Authentication** — Email/password + Google OAuth via Better Auth
+- **Quick Demo Login** — One-click auto-fill for Admin/User roles
+- **Custom 404 Page** — Animated error page with "Back to Home" CTA
+- **Global Loader** — Smooth animated spinner during route transitions
 
 </td>
 <td width="50%" valign="top">
 
-### 👤 Member Features
+### 👤 User Features
 - **Personal Dashboard** — Booking stats, favorites counter, trainer application status
 - **Stripe Checkout** — Secure class booking with auto-confirmation
 - **Favorites** — Save/remove classes with duplicate prevention
 - **Trainer Application** — Submit with experience & specialty
+- **Profile Management** — Update name, profile image, and password
 
 </td>
 </tr>
@@ -82,10 +88,12 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 <td valign="top">
 
 ### 🛡️ Admin Features
-- **Platform Analytics** — User, class, and transaction counts
+- **Platform Analytics** — User, class, and transaction counts (Recharts)
+- **Smart Data Tables** — Sortable columns, filtering, and pagination
 - **User Management** — Block/Unblock, promote to admin
 - **Trainer Approval** — Approve/Reject with feedback + auto role update
 - **Class Moderation** — Approve, reject, or delete any class
+- **Contact Messages** — Manage user inquiries
 - **Transaction Ledger** — Read-only Stripe payment history
 
 </td>
@@ -99,7 +107,7 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 ### Frontend
 | Category | Technology |
 |---|---|
-| **Framework** | Next.js 16.3.6 (App Router) |
+| **Framework** | Next.js 16 (App Router) |
 | **Language** | JavaScript (ES2024) |
 | **Styling** | Tailwind CSS v4 |
 | **UI Library** | HeroUI |
@@ -107,7 +115,8 @@ From discovering classes and booking sessions via **Stripe**, to trainer approva
 | **Icons** | React Icons (Heroicons v2) |
 | **Auth Client** | Better Auth |
 | **Theme** | next-themes |
-| **Notifications** | react-hot-toast |
+| **Notifications** | react-hot-toast / Sonner |
+| **Charts** | Recharts |
 | **Image Hosting** | Imgbb API |
 
 ### Backend (see [server repo](https://github.com/jk-jumur/gympilot-server))
