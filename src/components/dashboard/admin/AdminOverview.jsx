@@ -5,17 +5,13 @@ import { useSession } from "@/lib/auth-client";
 import { FaUsers, FaChalkboardTeacher, FaTicketAlt } from "react-icons/fa";
 import StatCard from "@/components/dashboard/user/StatCard";
 import UserProfileCard from "@/components/dashboard/user/UserProfileCard";
-import ChartsSection from "./ChartsSection";  // 👈 ADD
+import ChartsSection from "./ChartsSection";
 
 const API = "";
 
 export default function AdminOverview() {
   const { data: session } = useSession();
-  const [stats, setStats] = useState({
-    users: 0,
-    classes: 0,
-    bookings: 0,
-  });
+  const [stats, setStats] = useState({ users: 0, classes: 0, bookings: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,11 +22,10 @@ export default function AdminOverview() {
           fetch(`${API}/api/classes/admin/all`, { credentials: "include" }),
           fetch(`${API}/api/bookings/all`, { credentials: "include" }),
         ]);
-
         const usersData = await usersRes.json();
         const classesData = await classesRes.json();
         const bookingsData = await bookingsRes.json();
-
+        
         setStats({
           users: usersData?.data?.length || 0,
           classes: classesData?.data?.length || 0,
@@ -42,20 +37,16 @@ export default function AdminOverview() {
         setLoading(false);
       }
     };
-
     if (session?.user) fetchStats();
   }, [session]);
 
   if (loading) {
     return (
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 max-w-7xl mx-auto w-full">
         <div className="h-8 w-56 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-lg" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="h-24 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-xl"
-            />
+            <div key={i} className="h-24 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-xl" />
           ))}
         </div>
         <div className="h-32 bg-gray-200 dark:bg-neutral-800 animate-pulse rounded-xl" />
@@ -64,43 +55,46 @@ export default function AdminOverview() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto w-full">
+      
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
           Admin Dashboard
         </h1>
-        <p className="text-sm text-gray-500 dark:text-[#A0A0A0] mt-1">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-[#A0A0A0] mt-1">
           Platform overview and management hub
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard
-          icon={<FaUsers className="text-2xl text-white" />}
-          label="Total Users"
-          value={stats.users}
-          color="bg-blue-500"
+      {/* 
+        ⭐ Responsive Grid Fixed:
+        Mobile (default): 1 column
+        Tablet (sm 640px+): 2 columns
+        Desktop (lg 1024px+): 3 columns
+      */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <StatCard 
+          icon={<FaUsers className="text-xl sm:text-2xl text-white" />} 
+          label="Total Users" 
+          value={stats.users} 
+          color="bg-blue-500" 
         />
-        <StatCard
-          icon={<FaChalkboardTeacher className="text-2xl text-white" />}
-          label="Total Classes"
-          value={stats.classes}
-          color="bg-indigo-500"
+        <StatCard 
+          icon={<FaChalkboardTeacher className="text-xl sm:text-2xl text-white" />} 
+          label="Total Classes" 
+          value={stats.classes} 
+          color="bg-indigo-500" 
         />
-        <StatCard
-          icon={<FaTicketAlt className="text-2xl text-white" />}
-          label="Total Booked Classes"
-          value={stats.bookings}
-          color="bg-emerald-500"
+        <StatCard 
+          icon={<FaTicketAlt className="text-xl sm:text-2xl text-white" />} 
+          label="Total Booked Classes" 
+          value={stats.bookings} 
+          color="bg-emerald-500" 
         />
       </div>
 
-      {/* 👈 Charts Section */}
       <ChartsSection />
-
-      {/* Profile */}
       <UserProfileCard user={session?.user} role="Admin" />
     </div>
   );

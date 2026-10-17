@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/lib/toast";
 
-
 const API = "";
 
 export default function AdminAddPostForm() {
@@ -62,22 +61,20 @@ export default function AdminAddPostForm() {
   };
 
   return (
-    <div className="p-6 max-w-2xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Add Forum Post</h1>
-        <p className="text-sm text-gray-500 mt-1">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto w-full">
+      <div className="mb-5 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Add Forum Post</h1>
+        <p className="text-xs sm:text-sm text-gray-500 mt-1">
           Share informative content with the community
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-5"
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-5"
       >
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Title
-          </label>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Title</label>
           <input
             type="text"
             value={form.title}
@@ -88,39 +85,29 @@ export default function AdminAddPostForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Image
-          </label>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Image</label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            className="w-full border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm file:mr-3 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-3 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
-          {uploading && (
-            <p className="text-xs text-blue-600 mt-2 font-medium">
-              Uploading...
-            </p>
-          )}
+          {uploading && <p className="text-xs text-blue-600 mt-2 font-medium">Uploading...</p>}
           {form.image && (
             <img
               src={form.image}
               alt="preview"
-              className="mt-3 w-40 h-28 rounded-xl object-cover border border-gray-200"
+              className="mt-3 w-full sm:w-40 h-auto sm:h-28 rounded-xl object-cover border border-gray-200"
             />
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Description
-          </label>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
           <textarea
-            rows={6}
+            rows={5}
             value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
             className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             placeholder="Write your informative content..."
           />
