@@ -1,21 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast } from "@/lib/toast";
 import {
   HiOutlineCheckCircle,
   HiOutlineXCircle,
   HiOutlineTrash,
   HiOutlineAcademicCap,
+  HiOutlineChevronUpDown,
+  HiOutlineChevronUp,
+  HiOutlineChevronDown,
 } from "react-icons/hi2";
 
-
- const API = "";
+const API = "";
 
 export default function ManageClasses() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
+
+  // ⭐ Sorting State
+  const [sortField, setSortField] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchClasses = async () => {
     try {
@@ -36,6 +42,50 @@ export default function ManageClasses() {
   useEffect(() => {
     fetchClasses();
   }, []);
+
+  // ⭐ Sort Handler
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  // ⭐ Sorted Data
+  const sortedClasses = useMemo(() => {
+    const sorted = [...classes].sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+
+      // Handle name fallback
+      if (sortField === "name") {
+        aVal = a.name || a.className || "";
+        bVal = b.name || b.className || "";
+      }
+
+      // Handle trainer fallback
+      if (sortField === "trainer") {
+        aVal = a.trainer || a.trainerName || "";
+        bVal = b.trainer || b.trainerName || "";
+      }
+
+      // Numbers
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      // Strings
+      const aStr = String(aVal || "").toLowerCase();
+      const bStr = String(bVal || "").toLowerCase();
+      return sortOrder === "asc"
+        ? aStr.localeCompare(bStr)
+        : bStr.localeCompare(aStr);
+    });
+
+    return sorted;
+  }, [classes, sortField, sortOrder]);
 
   const updateStatus = async (id, action) => {
     if (!confirm(`Are you sure you want to ${action} this class?`)) return;
@@ -81,6 +131,18 @@ export default function ManageClasses() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  // ⭐ Sort Icon Component
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) {
+      return <HiOutlineChevronUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    }
+    return sortOrder === "asc" ? (
+      <HiOutlineChevronUp className="h-3.5 w-3.5 text-orange-500" />
+    ) : (
+      <HiOutlineChevronDown className="h-3.5 w-3.5 text-orange-500" />
+    );
   };
 
   if (loading) {
@@ -135,28 +197,68 @@ export default function ManageClasses() {
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Class
+                  {/* ⭐ Class - Sortable */}
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Class
+                      <SortIcon field="name" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Trainer
+
+                  {/* ⭐ Trainer - Sortable */}
+                  <th
+                    onClick={() => handleSort("trainer")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Trainer
+                      <SortIcon field="trainer" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Category
+
+                  {/* ⭐ Category - Sortable */}
+                  <th
+                    onClick={() => handleSort("category")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Category
+                      <SortIcon field="category" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Price
+
+                  {/* ⭐ Price - Sortable */}
+                  <th
+                    onClick={() => handleSort("price")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Price
+                      <SortIcon field="price" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Status
+
+                  {/* ⭐ Status - Sortable */}
+                  <th
+                    onClick={() => handleSort("status")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Status
+                      <SortIcon field="status" />
+                    </div>
                   </th>
+
                   <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {classes.map((c) => {
+                {sortedClasses.map((c) => {
                   const s = (c.status || "").toLowerCase();
                   const isApproved = s === "approved";
                   const isRejected = s === "rejected";
