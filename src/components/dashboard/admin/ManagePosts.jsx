@@ -1,16 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { toast } from "@/lib/toast";
-import { HiOutlineTrash, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
+import {
+  HiOutlineTrash,
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineChevronUpDown,
+  HiOutlineChevronUp,
+  HiOutlineChevronDown,
+} from "react-icons/hi2";
 
- const API = "";
+const API = "";
 
 export default function ManagePosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
+
+  // ⭐ Sorting State
+  const [sortField, setSortField] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const fetchPosts = async () => {
     try {
@@ -32,6 +42,35 @@ export default function ManagePosts() {
     fetchPosts();
   }, []);
 
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedPosts = useMemo(() => {
+    return [...posts].sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+
+      // Special handling for createdAt (Date comparison)
+      if (sortField === "createdAt") {
+        aVal = new Date(aVal).getTime();
+        bVal = new Date(bVal).getTime();
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      const aStr = String(aVal || "").toLowerCase();
+      const bStr = String(bVal || "").toLowerCase();
+      return sortOrder === "asc"
+        ? aStr.localeCompare(bStr)
+        : bStr.localeCompare(aStr);
+    });
+  }, [posts, sortField, sortOrder]);
+
   const handleDelete = async (id) => {
     if (!confirm("Delete this post? This cannot be undone.")) return;
     setBusyId(id);
@@ -50,6 +89,17 @@ export default function ManagePosts() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) {
+      return <HiOutlineChevronUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    }
+    return sortOrder === "asc" ? (
+      <HiOutlineChevronUp className="h-3.5 w-3.5 text-orange-500" />
+    ) : (
+      <HiOutlineChevronDown className="h-3.5 w-3.5 text-orange-500" />
+    );
   };
 
   if (loading) {
@@ -86,22 +136,46 @@ export default function ManagePosts() {
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Post
+                  {/* ⭐ Post (Title) */}
+                  <th
+                    onClick={() => handleSort("title")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Post
+                      <SortIcon field="title" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Author
+
+                  {/* ⭐ Author */}
+                  <th
+                    onClick={() => handleSort("author")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Author
+                      <SortIcon field="author" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Date
+
+                  {/* ⭐ Date */}
+                  <th
+                    onClick={() => handleSort("createdAt")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Date
+                      <SortIcon field="createdAt" />
+                    </div>
                   </th>
+
                   <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {posts.map((p) => (
+                {sortedPosts.map((p) => (
                   <tr
                     key={p._id}
                     className="hover:bg-gray-50 transition-colors"

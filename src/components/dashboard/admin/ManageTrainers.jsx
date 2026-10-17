@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast } from "@/lib/toast";
-import { HiOutlineUserMinus, HiOutlineSparkles } from "react-icons/hi2";
-
+import {
+  HiOutlineUserMinus,
+  HiOutlineSparkles,
+  HiOutlineChevronUpDown,
+  HiOutlineChevronUp,
+  HiOutlineChevronDown,
+} from "react-icons/hi2";
 
 const API = "";
 
@@ -11,6 +16,10 @@ export default function ManageTrainers() {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
+
+  // ⭐ Sorting State
+  const [sortField, setSortField] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchTrainers = async () => {
     try {
@@ -31,6 +40,32 @@ export default function ManageTrainers() {
   useEffect(() => {
     fetchTrainers();
   }, []);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedTrainers = useMemo(() => {
+    return [...trainers].sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      const aStr = String(aVal || "").toLowerCase();
+      const bStr = String(bVal || "").toLowerCase();
+      return sortOrder === "asc"
+        ? aStr.localeCompare(bStr)
+        : bStr.localeCompare(aStr);
+    });
+  }, [trainers, sortField, sortOrder]);
 
   const demoteTrainer = async (id) => {
     if (
@@ -56,6 +91,17 @@ export default function ManageTrainers() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) {
+      return <HiOutlineChevronUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    }
+    return sortOrder === "asc" ? (
+      <HiOutlineChevronUp className="h-3.5 w-3.5 text-orange-500" />
+    ) : (
+      <HiOutlineChevronDown className="h-3.5 w-3.5 text-orange-500" />
+    );
   };
 
   if (loading) {
@@ -92,22 +138,46 @@ export default function ManageTrainers() {
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Trainer
+                  {/* ⭐ Trainer */}
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Trainer
+                      <SortIcon field="name" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Specialty
+
+                  {/* ⭐ Specialty */}
+                  <th
+                    onClick={() => handleSort("specialty")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Specialty
+                      <SortIcon field="specialty" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Experience
+
+                  {/* ⭐ Experience */}
+                  <th
+                    onClick={() => handleSort("experience")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Experience
+                      <SortIcon field="experience" />
+                    </div>
                   </th>
+
                   <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {trainers.map((t) => (
+                {sortedTrainers.map((t) => (
                   <tr
                     key={t._id}
                     className="hover:bg-gray-50 transition-colors"

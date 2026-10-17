@@ -1,22 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast } from "@/lib/toast";
 import {
   HiOutlineShieldCheck,
   HiOutlineNoSymbol,
   HiOutlineCheckCircle,
   HiOutlineUsers,
+  HiOutlineChevronUpDown,
+  HiOutlineChevronUp,
+  HiOutlineChevronDown,
 } from "react-icons/hi2";
 
-
-
- const API = "";
+const API = "";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
+
+  // ⭐ Sorting State
+  const [sortField, setSortField] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchUsers = async () => {
     try {
@@ -35,6 +40,28 @@ export default function ManageUsers() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedUsers = useMemo(() => {
+    return [...users].sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+
+      const aStr = String(aVal || "").toLowerCase();
+      const bStr = String(bVal || "").toLowerCase();
+      return sortOrder === "asc"
+        ? aStr.localeCompare(bStr)
+        : bStr.localeCompare(aStr);
+    });
+  }, [users, sortField, sortOrder]);
 
   const updateStatus = async (id, currentStatus) => {
     const action = currentStatus === "blocked" ? "unblock" : "block";
@@ -90,6 +117,17 @@ export default function ManageUsers() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) {
+      return <HiOutlineChevronUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    }
+    return sortOrder === "asc" ? (
+      <HiOutlineChevronUp className="h-3.5 w-3.5 text-orange-500" />
+    ) : (
+      <HiOutlineChevronDown className="h-3.5 w-3.5 text-orange-500" />
+    );
   };
 
   if (loading) {
@@ -157,22 +195,46 @@ export default function ManageUsers() {
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    User
+                  {/* ⭐ User (Name) */}
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      User
+                      <SortIcon field="name" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Role
+
+                  {/* ⭐ Role */}
+                  <th
+                    onClick={() => handleSort("role")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Role
+                      <SortIcon field="role" />
+                    </div>
                   </th>
-                  <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
-                    Status
+
+                  {/* ⭐ Status */}
+                  <th
+                    onClick={() => handleSort("status")}
+                    className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Status
+                      <SortIcon field="status" />
+                    </div>
                   </th>
+
                   <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.map((u) => {
+                {sortedUsers.map((u) => {
                   const isBlocked = u.status === "blocked";
                   const isAdmin = (u.role || "").toLowerCase() === "admin";
                   return (
