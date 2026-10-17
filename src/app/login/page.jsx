@@ -3,23 +3,34 @@
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";       
-import { toast } from "@/lib/toast";               
+import { useRouter } from "next/navigation";
+import { toast } from "@/lib/toast";
+import { DEMO_CREDENTIALS } from "@/config/demoCredentials";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState(false);    
+  const [loading, setLoading] = useState(false);
 
-  const router = useRouter();                        
+  const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  // 🎯 Demo fill handler
+  const handleDemoFill = (roleKey) => {
+    const cred = DEMO_CREDENTIALS[roleKey];
+    setEmail(cred.email);
+    setPassword(cred.password);
+    toast.success(`${cred.role} credentials filled!`, {
+      duration: 2000,
+      icon: "✅",
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ⭐ Validation
     if (!email || !password) {
       toast.error("Please fill in all fields");
       return;
@@ -33,52 +44,49 @@ export default function LoginPage() {
       });
 
       if (error) {
-        toast.error(error.message || "Invalid credentials");   
+        toast.error(error.message || "Invalid credentials");
         setLoading(false);
         return;
       }
 
-      // ⭐ Success toast
       toast.success(
         `Welcome back${data?.user?.name ? `, ${data.user.name}` : ""}!`,
         { duration: 3000, icon: "🎉" }
       );
 
-      // ⭐ Delay so user sees toast
       setTimeout(() => {
         router.push("/");
         router.refresh();
       }, 600);
-
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong. Please try again.");   
+      toast.error("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
-      toast.loading("Redirecting to Google...", { duration: 2000 });   
-      
+      toast.loading("Redirecting to Google...", { duration: 2000 });
+
       await authClient.signIn.social({
         provider: "google",
         callbackURL: "/",
       });
     } catch (err) {
-      toast.error("Google login failed");      
+      toast.error("Google login failed");
     }
   };
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#FAFAF9] p-4 text-[#171717] transition-colors dark:bg-[#0F0F0F] dark:text-white sm:p-6 lg:p-8">
-      <div className="w-full max-w-5xl overflow-hidden rounded-3xl border border-[#E7E5E4] bg-white shadow-[0_20px_60px_rgba(23,23,23,0.08)] grid grid-cols-1 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] lg:grid-cols-2">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-[#E7E5E4] bg-white shadow-[0_20px_60px_rgba(23,23,23,0.08)] dark:border-[#2A2A2A] dark:bg-[#1A1A1A] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] lg:grid-cols-2">
         
         {/* ================= LEFT SIDE ================= */}
-        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#EA580C] via-[#F97316] to-[#F59E0B] p-10 text-white dark:from-[#1A1A1A] dark:via-[#1F120B] dark:to-[#2A1500]">
+        <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-[#EA580C] via-[#F97316] to-[#F59E0B] p-10 text-white lg:flex dark:from-[#1A1A1A] dark:via-[#1F120B] dark:to-[#2A1500]">
           
           <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-white/10 blur-3xl dark:bg-[#FF4D00]/10" />
-          <div className="pointer-events-none absolute -left-12 -bottom-12 h-64 w-64 rounded-full bg-black/10 blur-3xl dark:bg-[#FF4D00]/5" />
+          <div className="pointer-events-none absolute -bottom-12 -left-12 h-64 w-64 rounded-full bg-black/10 blur-3xl dark:bg-[#FF4D00]/5" />
 
           <div className="relative z-10">
             <Link href="/" className="group flex items-center gap-3 no-underline">
@@ -129,6 +137,7 @@ export default function LoginPage() {
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex flex-col justify-between bg-white p-8 dark:bg-[#1A1A1A] sm:p-10 lg:p-12">
           
+          {/* Header */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-extrabold tracking-tight text-[#171717] dark:text-white sm:text-3xl">
@@ -155,6 +164,30 @@ export default function LoginPage() {
           <div className="my-6 space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               
+              {/* ⭐ QUICK DEMO LOGIN — 2 Buttons */}
+              <div className="space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Quick Demo Login
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleDemoFill("admin")}
+                    className="rounded-lg border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+                  >
+                    Admin
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoFill("user")}
+                    className="rounded-lg border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+                  >
+                    User
+                  </button>
+                </div>
+              </div>
+
+              {/* Email */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase tracking-wider text-[#404040] dark:text-[#A0A0A0]">
                   Email address
@@ -177,6 +210,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#404040] dark:text-[#A0A0A0]">
@@ -220,10 +254,11 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {/* Sign In */}
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#F59E0B] py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition-all duration-200 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed dark:bg-[#FF4D00] dark:from-[#FF4D00] dark:to-[#FF4D00] dark:shadow-orange-900/30 dark:hover:bg-[#FF6A1A]"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#F59E0B] py-3 text-sm font-bold text-white shadow-md shadow-orange-500/25 transition-all duration-200 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[#FF4D00] dark:from-[#FF4D00] dark:to-[#FF4D00] dark:shadow-orange-900/30 dark:hover:bg-[#FF6A1A]"
               >
                 <span>{loading ? "Signing in..." : "Sign In"}</span>
                 {!loading && (
@@ -234,6 +269,7 @@ export default function LoginPage() {
               </button>
             </form>
 
+            {/* Or Divider */}
             <div className="relative flex items-center justify-center">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-[#E5E5E5] dark:border-[#2A2A2A]" />
@@ -243,7 +279,9 @@ export default function LoginPage() {
               </span>
             </div>
 
-            <button onClick={handleGoogleSignIn}
+            {/* Google */}
+            <button
+              onClick={handleGoogleSignIn}
               type="button"
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#FED7AA] bg-white py-3 text-sm font-semibold text-[#404040] shadow-sm transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
             >
