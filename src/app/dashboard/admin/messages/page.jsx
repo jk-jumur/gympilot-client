@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "@/lib/toast";
 
+
 const API = "";
 const ITEMS_PER_PAGE = 10;
 const STATUS_OPTIONS = ["all", "unread", "read", "replied"];
@@ -81,7 +82,7 @@ export default function AdminContactMessagesPage() {
   // ═══════════ UPDATE STATUS ═══════════
   const handleUpdateStatus = async (id, newStatus) => {
     try {
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
+      const res = await fetch(`${API}/api/contact/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -111,7 +112,7 @@ export default function AdminContactMessagesPage() {
     if (!confirm("Delete this message permanently?")) return;
     setDeletingId(id);
     try {
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
+      const res = await fetch(`${API}/api/contact/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -152,7 +153,7 @@ export default function AdminContactMessagesPage() {
     };
     return (
       <span
-        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
           styles[status] || styles.unread
         }`}
       >
@@ -162,24 +163,25 @@ export default function AdminContactMessagesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    // w-full max-w-full overflow-x-hidden যোগ করা হয়েছে স্ক্রলবার বন্ধ করার জন্য
+    <div className="w-full max-w-full overflow-x-hidden space-y-4 sm:space-y-6 p-1 sm:p-0">
       
       {/* ═══ HEADER ═══ */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#171717] dark:text-white sm:text-3xl">
+          <h1 className="text-xl font-extrabold tracking-tight text-[#171717] dark:text-white sm:text-2xl md:text-3xl">
             Contact Messages
           </h1>
-          <p className="mt-1 text-sm text-[#737373] dark:text-[#A0A0A0]">
+          <p className="mt-1 text-xs text-[#737373] dark:text-[#A0A0A0] sm:text-sm">
             Manage inquiries, feedback, and requests from users.
           </p>
         </div>
 
         <button
           onClick={fetchMessages}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E7E5E4] bg-white px-4 py-2.5 text-sm font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E7E5E4] bg-white px-4 py-2 text-xs font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] dark:hover:border-[#3A3A3A] dark:hover:bg-[#1F1F1F] sm:py-2.5 sm:text-sm"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+          <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
           Refresh
@@ -187,7 +189,7 @@ export default function AdminContactMessagesPage() {
       </div>
 
       {/* ═══ STATS ═══ */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:grid-cols-4">
         {[
           { label: "Total", value: stats.total, icon: "📬" },
           { label: "Unread", value: stats.unread, icon: "🔔" },
@@ -196,15 +198,15 @@ export default function AdminContactMessagesPage() {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl border border-[#E7E5E4] bg-white p-4 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] sm:p-5"
+            className="rounded-xl border border-[#E7E5E4] bg-white p-3 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] sm:rounded-2xl sm:p-4 md:p-5"
           >
             <div className="flex items-center justify-between">
-              <span className="text-2xl">{stat.icon}</span>
-              <span className="text-2xl font-extrabold tracking-tight text-[#171717] dark:text-white">
+              <span className="text-lg sm:text-2xl">{stat.icon}</span>
+              <span className="text-xl font-extrabold tracking-tight text-[#171717] dark:text-white sm:text-2xl">
                 {stat.value}
               </span>
             </div>
-            <div className="mt-2 text-xs font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+            <div className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] sm:mt-2 sm:text-xs">
               {stat.label}
             </div>
           </div>
@@ -212,9 +214,10 @@ export default function AdminContactMessagesPage() {
       </div>
 
       {/* ═══ CONTROLS ═══ */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-[#E7E5E4] bg-white p-4 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A3A3A3] dark:text-[#666666]">
+            {/* ═══ CONTROLS ═══ */}
+      <div className="flex flex-col gap-3 rounded-xl border border-[#E7E5E4] bg-white p-3 dark:border-[#2A2A2A] dark:bg-[#1A1A1A] sm:rounded-2xl sm:p-4 lg:flex-row lg:items-center">
+        <div className="relative flex-1 min-w-0">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A3A3A3] dark:text-[#666666] sm:left-3.5">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -224,16 +227,17 @@ export default function AdminContactMessagesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email, or subject..."
-            className="w-full rounded-xl border border-[#FED7AA] bg-[#FAFAF9] py-3 pl-10 pr-4 text-sm text-[#171717] placeholder-[#A3A3A3] transition-all focus:border-[#F97316] focus:bg-white focus:outline-none dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-white dark:placeholder-[#666666] dark:focus:border-[#FF4D00]"
+            className="w-full rounded-lg border border-[#FED7AA] bg-[#FAFAF9] py-2.5 pl-9 pr-3 text-xs text-[#171717] placeholder-[#A3A3A3] transition-all focus:border-[#F97316] focus:bg-white focus:outline-none dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-white dark:placeholder-[#666666] dark:focus:border-[#FF4D00] sm:rounded-xl sm:py-3 sm:pl-10 sm:pr-4 sm:text-sm"
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto">
+        {/* Status Filters - Mobile e grid, Desktop e flex */}
+        <div className="grid grid-cols-4 gap-1.5 sm:flex sm:gap-2 sm:pb-0">
           {STATUS_OPTIONS.map((s) => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`whitespace-nowrap rounded-lg px-1 py-2 text-[9px] font-bold uppercase tracking-wider transition-all sm:rounded-xl sm:px-4 sm:py-2.5 sm:text-xs ${
                 statusFilter === s
                   ? "bg-gradient-to-r from-[#F97316] to-[#F59E0B] text-white shadow-md shadow-orange-500/25"
                   : "border border-[#E7E5E4] bg-white text-[#737373] hover:border-[#FDBA74] hover:text-[#F97316] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#A0A0A0]"
@@ -244,20 +248,20 @@ export default function AdminContactMessagesPage() {
           ))}
         </div>
       </div>
-
       {/* ═══ LIST ═══ */}
-      <div className="overflow-hidden rounded-2xl border border-[#E7E5E4] bg-white dark:border-[#2A2A2A] dark:bg-[#1A1A1A]">
+            {/* ═══ LIST ═══ */}
+      <div className="overflow-hidden rounded-xl border border-[#E7E5E4] bg-white dark:border-[#2A2A2A] dark:bg-[#1A1A1A] sm:rounded-2xl w-full">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#F97316] border-t-transparent" />
           </div>
         ) : paginated.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <span className="mb-3 text-5xl">📭</span>
-            <h3 className="text-lg font-bold text-[#171717] dark:text-white">
+          <div className="flex flex-col items-center justify-center py-16 text-center sm:py-20">
+            <span className="mb-3 text-4xl sm:text-5xl">📭</span>
+            <h3 className="text-base font-bold text-[#171717] dark:text-white sm:text-lg">
               No messages found
             </h3>
-            <p className="mt-1 text-sm text-[#737373] dark:text-[#A0A0A0]">
+            <p className="mt-1 text-xs text-[#737373] dark:text-[#A0A0A0] sm:text-sm">
               {search || statusFilter !== "all"
                 ? "Try adjusting your filters."
                 : "New contact messages will appear here."}
@@ -265,24 +269,24 @@ export default function AdminContactMessagesPage() {
           </div>
         ) : (
           <>
-            {/* Desktop Table */}
-            <div className="hidden lg:block">
-              <table className="w-full">
+            {/* 🖥️ DESKTOP TABLE VIEW (lg+) */}
+            <div className="hidden lg:block w-full">
+              <table className="w-full table-fixed text-left">
                 <thead className="border-b border-[#E7E5E4] bg-[#FAFAF9] dark:border-[#2A2A2A] dark:bg-[#0F0F0F]">
                   <tr>
-                    <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+                    <th className="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] w-[30%]">
                       Sender
                     </th>
-                    <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+                    <th className="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] w-[30%]">
                       Subject
                     </th>
-                    <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+                    <th className="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] w-[15%]">
                       Date
                     </th>
-                    <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+                    <th className="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] w-[15%]">
                       Status
                     </th>
-                    <th className="px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0]">
+                    <th className="px-4 py-3.5 text-right text-[10px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A0A0A0] w-[10%]">
                       Actions
                     </th>
                   </tr>
@@ -297,7 +301,7 @@ export default function AdminContactMessagesPage() {
                           : ""
                       }`}
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="truncate font-semibold text-[#171717] dark:text-white">
@@ -312,22 +316,22 @@ export default function AdminContactMessagesPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="max-w-xs truncate text-sm text-[#404040] dark:text-[#E0E0E0]">
+                      <td className="px-4 py-4">
+                        <div className="truncate text-sm text-[#404040] dark:text-[#E0E0E0]">
                           {msg.subject}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-xs text-[#737373] dark:text-[#A0A0A0]">
+                      <td className="px-4 py-4 text-xs text-[#737373] dark:text-[#A0A0A0]">
                         {new Date(msg.createdAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
                         })}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4">
                         <StatusBadge status={msg.status} />
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4">
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => handleView(msg)}
@@ -361,39 +365,39 @@ export default function AdminContactMessagesPage() {
               </table>
             </div>
 
-            {/* Mobile Cards */}
+            {/* 📱 MOBILE & TABLET CARD VIEW (lg-) */}
             <div className="divide-y divide-[#E7E5E4] lg:hidden dark:divide-[#2A2A2A]">
               {paginated.map((msg) => (
                 <div
                   key={msg._id}
-                  className={`p-4 transition-colors ${
+                  className={`p-3 sm:p-4 transition-colors ${
                     msg.status === "unread"
                       ? "bg-orange-50/30 dark:bg-orange-900/5"
                       : ""
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-2 sm:gap-3">
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate font-semibold text-[#171717] dark:text-white">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="truncate font-bold text-xs sm:text-sm text-[#171717] dark:text-white">
                           {msg.name}
                         </span>
                         {msg.status === "unread" && (
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-[#F97316]" />
+                          <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0 rounded-full bg-[#F97316]" />
                         )}
                       </div>
-                      <div className="truncate text-xs text-[#737373] dark:text-[#A0A0A0]">
+                      <div className="truncate text-[10px] sm:text-xs text-[#737373] dark:text-[#A0A0A0]">
                         {msg.email}
                       </div>
                     </div>
                     <StatusBadge status={msg.status} />
                   </div>
 
-                  <div className="mt-2 text-sm font-medium text-[#404040] dark:text-[#E0E0E0]">
+                  <div className="mt-2 text-xs sm:text-sm font-medium text-[#404040] dark:text-[#E0E0E0] truncate">
                     {msg.subject}
                   </div>
 
-                  <div className="mt-1 text-xs text-[#A3A3A3] dark:text-[#666666]">
+                  <div className="mt-1 text-[10px] sm:text-xs text-[#A3A3A3] dark:text-[#666666]">
                     {new Date(msg.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -404,16 +408,16 @@ export default function AdminContactMessagesPage() {
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => handleView(msg)}
-                      className="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400"
+                      className="flex-1 rounded-lg bg-blue-50 px-2 py-1.5 text-[10px] sm:text-xs font-bold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400"
                     >
                       View
                     </button>
                     <button
                       onClick={() => handleDelete(msg._id)}
                       disabled={deletingId === msg._id}
-                      className="flex-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:bg-red-900/20 dark:text-red-400"
+                      className="flex-1 rounded-lg bg-red-50 px-2 py-1.5 text-[10px] sm:text-xs font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:bg-red-900/20 dark:text-red-400"
                     >
-                      Delete
+                      {deletingId === msg._id ? "Deleting..." : "Delete"}
                     </button>
                   </div>
                 </div>
@@ -425,8 +429,8 @@ export default function AdminContactMessagesPage() {
 
       {/* ═══ PAGINATION ═══ */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-[#737373] dark:text-[#A0A0A0]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+          <p className="text-[10px] sm:text-xs text-[#737373] dark:text-[#A0A0A0] text-center sm:text-left">
             Showing{" "}
             <span className="font-semibold text-[#171717] dark:text-white">
               {(currentPage - 1) * ITEMS_PER_PAGE + 1}
@@ -441,21 +445,21 @@ export default function AdminContactMessagesPage() {
             </span>
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 sm:gap-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="rounded-lg border border-[#E7E5E4] bg-white px-3 py-2 text-sm font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:text-[#F97316] disabled:opacity-40 dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0]"
+              className="rounded-lg border border-[#E7E5E4] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:text-[#F97316] disabled:opacity-40 dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] sm:px-3 sm:py-2 sm:text-sm"
             >
               ←
             </button>
-            <span className="flex items-center px-3 text-sm font-semibold text-[#171717] dark:text-white">
+            <span className="flex items-center px-2 text-[10px] font-semibold text-[#171717] dark:text-white sm:px-3 sm:text-sm">
               {currentPage} / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="rounded-lg border border-[#E7E5E4] bg-white px-3 py-2 text-sm font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:text-[#F97316] disabled:opacity-40 dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0]"
+              className="rounded-lg border border-[#E7E5E4] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:text-[#F97316] disabled:opacity-40 dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] sm:px-3 sm:py-2 sm:text-sm"
             >
               →
             </button>
@@ -467,7 +471,7 @@ export default function AdminContactMessagesPage() {
       <AnimatePresence>
         {selected && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm"
             onClick={() => setSelected(null)}
           >
             <motion.div
@@ -475,17 +479,17 @@ export default function AdminContactMessagesPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-[#E7E5E4] bg-white shadow-2xl dark:border-[#2A2A2A] dark:bg-[#1A1A1A]"
+              className="relative w-full max-w-2xl overflow-hidden rounded-2xl sm:rounded-3xl border border-[#E7E5E4] bg-white shadow-2xl dark:border-[#2A2A2A] dark:bg-[#1A1A1A]"
             >
-              <div className="flex items-start justify-between border-b border-[#E7E5E4] p-5 dark:border-[#2A2A2A] sm:p-6">
-                <div className="min-w-0">
-                  <div className="mb-2 flex items-center gap-2">
+              <div className="flex items-start justify-between border-b border-[#E7E5E4] p-4 dark:border-[#2A2A2A] sm:p-6">
+                <div className="min-w-0 pr-2">
+                  <div className="mb-1.5 sm:mb-2 flex items-center gap-2">
                     <StatusBadge status={selected.status} />
                   </div>
-                  <h3 className="text-xl font-extrabold text-[#171717] dark:text-white">
+                  <h3 className="text-base sm:text-xl font-extrabold text-[#171717] dark:text-white truncate">
                     {selected.subject}
                   </h3>
-                  <p className="mt-1 text-sm text-[#737373] dark:text-[#A0A0A0]">
+                  <p className="mt-1 text-[10px] sm:text-sm text-[#737373] dark:text-[#A0A0A0] break-words">
                     From{" "}
                     <span className="font-semibold text-[#171717] dark:text-white">
                       {selected.name}
@@ -502,20 +506,20 @@ export default function AdminContactMessagesPage() {
 
                 <button
                   onClick={() => setSelected(null)}
-                  className="shrink-0 rounded-lg p-2 text-[#737373] transition-colors hover:bg-[#FAFAF9] hover:text-[#171717] dark:text-[#A0A0A0] dark:hover:bg-[#2A2A2A]"
+                  className="shrink-0 rounded-lg p-1.5 sm:p-2 text-[#737373] transition-colors hover:bg-[#FAFAF9] hover:text-[#171717] dark:text-[#A0A0A0] dark:hover:bg-[#2A2A2A]"
                 >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
-              <div className="p-5 sm:p-6">
-                <div className="rounded-2xl bg-[#FAFAF9] p-4 text-sm leading-relaxed text-[#404040] dark:bg-[#111111] dark:text-[#E0E0E0] sm:p-5">
+              <div className="p-4 sm:p-6">
+                <div className="max-h-[40vh] overflow-y-auto rounded-xl sm:rounded-2xl bg-[#FAFAF9] p-3 text-xs sm:p-5 sm:text-sm leading-relaxed text-[#404040] dark:bg-[#111111] dark:text-[#E0E0E0]">
                   {selected.message}
                 </div>
 
-                <div className="mt-3 text-xs text-[#A3A3A3] dark:text-[#666666]">
+                <div className="mt-2 sm:mt-3 text-[10px] sm:text-xs text-[#A3A3A3] dark:text-[#666666]">
                   Received{" "}
                   {new Date(selected.createdAt).toLocaleString("en-US", {
                     dateStyle: "medium",
@@ -524,12 +528,12 @@ export default function AdminContactMessagesPage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#E7E5E4] bg-[#FAFAF9] p-5 dark:border-[#2A2A2A] dark:bg-[#0F0F0F] sm:p-6">
+              <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#E7E5E4] bg-[#FAFAF9] p-3 dark:border-[#2A2A2A] dark:bg-[#0F0F0F] sm:p-6">
                 <a
                   href={`mailto:${selected.email}?subject=Re: ${encodeURIComponent(
                     selected.subject
                   )}`}
-                  className="rounded-xl border border-[#E7E5E4] bg-white px-4 py-2.5 text-sm font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0]"
+                  className="rounded-lg sm:rounded-xl border border-[#E7E5E4] bg-white px-3 py-2 text-[10px] sm:text-sm font-semibold text-[#404040] transition-all hover:border-[#FDBA74] hover:bg-[#FFF7ED] dark:border-[#2A2A2A] dark:bg-[#111111] dark:text-[#E0E0E0] sm:px-4 sm:py-2.5"
                 >
                   ✉️ Reply
                 </a>
@@ -537,7 +541,7 @@ export default function AdminContactMessagesPage() {
                 {selected.status !== "replied" && (
                   <button
                     onClick={() => handleUpdateStatus(selected._id, "replied")}
-                    className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition-all hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400"
+                    className="rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10px] sm:text-sm font-semibold text-emerald-700 transition-all hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 sm:px-4 sm:py-2.5"
                   >
                     ✅ Mark Replied
                   </button>
@@ -548,7 +552,7 @@ export default function AdminContactMessagesPage() {
                     handleDelete(selected._id);
                     setSelected(null);
                   }}
-                  className="rounded-xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-red-600"
+                  className="rounded-lg sm:rounded-xl bg-red-500 px-3 py-2 text-[10px] sm:text-sm font-semibold text-white transition-all hover:bg-red-600 sm:px-4 sm:py-2.5"
                 >
                   🗑 Delete
                 </button>
