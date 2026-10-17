@@ -10,6 +10,13 @@ export const DEMO_CREDENTIALS = {
     icon: "👤",
   },
  
+     trainer: {
+    email: "trainer@gympilot.com",
+    password: "Password123",
+    role: "Trainer",
+    description: "Fitness professional",
+    icon: "🏋️",
+  },
   admin: {
     email: "admin@gympilot.com",
     password: "Password123",
